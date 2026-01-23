@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <title>Cadastro de Casais - IBVP</title>
+    <title>Cadastro de Famílias - IBVP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
@@ -10,10 +10,10 @@
     <div class="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8">
       <header class="mb-8 text-center">
         <h1 class="text-2xl font-bold text-slate-800">
-          Ministério de Casais - IBVP
+          Ministério de Famílias - IBVP
         </h1>
         <p class="text-sm text-slate-500 mt-1">
-          Formulário de cadastro de casais
+          Formulário de cadastro de famílias
         </p>
       </header>
 
@@ -292,6 +292,33 @@
           </div>
         </section>
 
+        <!-- Autorização de uso dos dados -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">
+            Autorização de uso dos dados
+          </h2>
+          <label class="flex items-start gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              id="consent"
+              class="mt-1 rounded border-slate-300"
+            />
+            <span>
+              Autorizo o Ministério de Famílias da IBVP a coletar e utilizar
+              meus dados pessoais e os de minha família exclusivamente para fins
+              de contato pastoral, organização de eventos e comunicações
+              internas da igreja. Estou ciente de que meus dados serão tratados
+              conforme a Lei Geral de Proteção de Dados (LGPD – Lei nº
+              13.709/2018), não serão compartilhados com terceiros e poderão ser
+              atualizados ou excluídos a qualquer momento mediante solicitação.
+            </span>
+          </label>
+          <p class="text-xs text-slate-400 mt-1">
+            Em caso de dúvidas ou pedidos de atualização/exclusão de dados,
+            procure a liderança do Ministério de Famílias da IBVP.
+          </p>
+        </section>
+
         <!-- Observações -->
         <section>
           <h2 class="text-lg font-semibold text-slate-700 mb-3">
@@ -309,7 +336,7 @@
         <div class="flex justify-end pt-2">
           <button
             type="submit"
-            class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-60"
+            class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:opacity-60"
           >
             Enviar cadastro
           </button>
@@ -336,6 +363,8 @@
         document.getElementById("other_church_2_wrapper");
       const otherChurch1 = document.getElementById("other_church_1");
       const otherChurch2 = document.getElementById("other_church_2");
+
+      const consentCheckbox = document.getElementById("consent");
 
       // Campos de nome e labels dinâmicas
       const namePerson1Input = document.getElementById("name_person_1");
@@ -481,6 +510,13 @@
         if (!name1 || !name2) {
           messageDiv.textContent =
             "Por favor, preencha o nome do homem e da mulher.";
+          messageDiv.classList.add("text-red-600");
+          return;
+        }
+
+        if (!consentCheckbox.checked) {
+          messageDiv.textContent =
+            "Para prosseguir, é preciso autorizar o uso dos dados.";
           messageDiv.classList.add("text-red-600");
           return;
         }
