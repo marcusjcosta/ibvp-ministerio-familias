@@ -5,9 +5,9 @@ exports.handler = async (event) => {
     }
 
     const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
+    const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!SUPABASE_URL || !SUPABASE_KEY) {
+    if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
       return {
         statusCode: 500,
         body: JSON.stringify({ error: "Missing Supabase env vars" }),
@@ -16,7 +16,6 @@ exports.handler = async (event) => {
 
     const payload = JSON.parse(event.body || "{}");
 
-    // Monta o registro com o mínimo obrigatório
     const row = {
       name_couple: payload.name_couple,
       name_person_1: payload.name_person_1,
@@ -48,8 +47,8 @@ exports.handler = async (event) => {
     const resp = await fetch(`${SUPABASE_URL}/rest/v1/couples`, {
       method: "POST",
       headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
+        apikey: SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
         "Content-Type": "application/json",
         Prefer: "return=representation",
       },
