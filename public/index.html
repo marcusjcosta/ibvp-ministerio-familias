@@ -1,12 +1,404 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>IBVP - Ministério de Casais</title>
+    <title>Cadastro de Casais - IBVP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <h1>IBVP - Ministério de Casais</h1>
-    <p>Se você está vendo esta página, o site está no ar. ✅</p>
+  <body class="min-h-screen bg-slate-100 flex items-center justify-center py-10">
+    <div class="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8">
+      <header class="mb-8 text-center">
+        <!-- Aqui depois podemos colocar o logotipo da igreja -->
+        <h1 class="text-2xl font-bold text-slate-800">
+          Ministério de Casais - IBVP
+        </h1>
+        <p class="text-sm text-slate-500 mt-1">
+          Formulário de cadastro de casais
+        </p>
+      </header>
+
+      <form id="casalForm" class="space-y-6">
+        <!-- Dados do casal -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">
+            Dados do casal
+          </h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Nome da pessoa 1</label
+              >
+              <input
+                type="text"
+                id="name_person_1"
+                required
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Nome da pessoa 2</label
+              >
+              <input
+                type="text"
+                id="name_person_2"
+                required
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Nome do casal (como será exibido)</label
+              >
+              <input
+                type="text"
+                id="name_couple"
+                placeholder="Ex.: João e Maria"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+              <p class="text-xs text-slate-400 mt-1">
+                Se deixar em branco, será montado automaticamente com os dois
+                nomes.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Datas importantes -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">
+            Datas importantes
+          </h2>
+          <div class="grid md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Nascimento pessoa 1</label
+              >
+              <input
+                type="date"
+                id="birth_person_1"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Nascimento pessoa 2</label
+              >
+              <input
+                type="date"
+                id="birth_person_2"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Aniversário de casamento</label
+              >
+              <input
+                type="date"
+                id="wedding_date"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- Contato -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">
+            Contato e endereço
+          </h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Telefone</label
+              >
+              <input
+                type="text"
+                id="phone"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >E-mail</label
+              >
+              <input
+                type="email"
+                id="email"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Endereço</label
+              >
+              <input
+                type="text"
+                id="address"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- Filhos -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">Filhos</h2>
+          <div class="grid md:grid-cols-3 gap-4 items-end">
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Tem filhos?</label
+              >
+              <select
+                id="has_children"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              >
+                <option value="no">Não</option>
+                <option value="yes">Sim</option>
+              </select>
+            </div>
+            <div id="children_count_wrapper" class="hidden">
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Quantos filhos?</label
+              >
+              <input
+                type="number"
+                min="1"
+                max="10"
+                id="children_count"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+          </div>
+
+          <div id="children_fields" class="mt-4 space-y-4"></div>
+        </section>
+
+        <!-- Igreja -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">Igreja</h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >São membros da IBVP?</label
+              >
+              <select
+                id="is_member"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              >
+                <option value="yes">Sim</option>
+                <option value="no">Não</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Há quanto tempo?</label
+              >
+              <input
+                type="text"
+                id="membership_time"
+                placeholder="Ex.: 5 anos, desde 2018..."
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-slate-600 mb-1"
+                >Vem de outra igreja? Qual?</label
+              >
+              <input
+                type="text"
+                id="other_church"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- Observações -->
+        <section>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">Observações</h2>
+          <textarea
+            id="notes"
+            rows="3"
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+          ></textarea>
+        </section>
+
+        <!-- Mensagens -->
+        <div id="message" class="text-sm"></div>
+
+        <!-- Botão -->
+        <div class="flex justify-end pt-2">
+          <button
+            type="submit"
+            class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-60"
+          >
+            Enviar cadastro
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const hasChildrenSelect = document.getElementById("has_children");
+      const childrenCountWrapper = document.getElementById(
+        "children_count_wrapper"
+      );
+      const childrenCountInput = document.getElementById("children_count");
+      const childrenFieldsContainer =
+        document.getElementById("children_fields");
+      const form = document.getElementById("casalForm");
+      const messageDiv = document.getElementById("message");
+
+      // Mostrar / esconder quantidade de filhos
+      hasChildrenSelect.addEventListener("change", () => {
+        if (hasChildrenSelect.value === "yes") {
+          childrenCountWrapper.classList.remove("hidden");
+        } else {
+          childrenCountWrapper.classList.add("hidden");
+          childrenFieldsContainer.innerHTML = "";
+          childrenCountInput.value = "";
+        }
+      });
+
+      // Gerar campos de filhos dinamicamente
+      childrenCountInput.addEventListener("input", () => {
+        const count = parseInt(childrenCountInput.value, 10);
+        childrenFieldsContainer.innerHTML = "";
+
+        if (!count || count < 1) return;
+
+        const safeCount = Math.min(count, 10);
+
+        for (let i = 1; i <= safeCount; i++) {
+          const wrapper = document.createElement("div");
+          wrapper.className =
+            "grid md:grid-cols-2 gap-4 border border-slate-200 rounded-xl p-3";
+
+          wrapper.innerHTML = `
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Nome do filho ${i}
+              </label>
+              <input
+                type="text"
+                data-child-name="${i}"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Data de nascimento do filho ${i}
+              </label>
+              <input
+                type="date"
+                data-child-birth="${i}"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              />
+            </div>
+          `;
+
+          childrenFieldsContainer.appendChild(wrapper);
+        }
+      });
+
+      // Envio do formulário
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        messageDiv.textContent = "";
+        messageDiv.className = "text-sm";
+
+        const name1 = document.getElementById("name_person_1").value.trim();
+        const name2 = document.getElementById("name_person_2").value.trim();
+        let nameCouple = document.getElementById("name_couple").value.trim();
+
+        if (!name1 || !name2) {
+          messageDiv.textContent =
+            "Por favor, preencha os nomes das duas pessoas.";
+          messageDiv.classList.add("text-red-600");
+          return;
+        }
+
+        if (!nameCouple) {
+          nameCouple = name1 + " e " + name2;
+        }
+
+        // Montar array de filhos (se houver)
+        const children = [];
+        if (hasChildrenSelect.value === "yes") {
+          const count = parseInt(childrenCountInput.value, 10) || 0;
+          for (let i = 1; i <= count; i++) {
+            const nameInput = document.querySelector(
+              `[data-child-name="${i}"]`
+            );
+            const birthInput = document.querySelector(
+              `[data-child-birth="${i}"]`
+            );
+            if (nameInput && nameInput.value.trim()) {
+              children.push({
+                name: nameInput.value.trim(),
+                birth: birthInput?.value || null,
+              });
+            }
+          }
+        }
+
+        const payload = {
+          name_couple: nameCouple,
+          name_person_1: name1,
+          name_person_2: name2,
+          birth_person_1: document.getElementById("birth_person_1").value || null,
+          birth_person_2: document.getElementById("birth_person_2").value || null,
+          wedding_date: document.getElementById("wedding_date").value || null,
+          phone: document.getElementById("phone").value || null,
+          email: document.getElementById("email").value || null,
+          address: document.getElementById("address").value || null,
+          children: children.length > 0 ? children : null,
+          is_member:
+            document.getElementById("is_member").value === "yes" ? true : false,
+          membership_time:
+            document.getElementById("membership_time").value || null,
+          other_church: document.getElementById("other_church").value || null,
+          notes: document.getElementById("notes").value || null,
+        };
+
+        try {
+          const response = await fetch(
+            "/.netlify/functions/createCouple",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            }
+          );
+
+          const data = await response.json();
+
+          if (!response.ok || !data.ok) {
+            console.error("Erro na API:", data);
+            messageDiv.textContent =
+              "Ocorreu um erro ao salvar o cadastro. Tente novamente.";
+            messageDiv.classList.add("text-red-600");
+            return;
+          }
+
+          messageDiv.textContent =
+            "Cadastro enviado com sucesso! Muito obrigado 😊";
+          messageDiv.classList.add("text-emerald-600");
+
+          form.reset();
+          childrenFieldsContainer.innerHTML = "";
+          childrenCountWrapper.classList.add("hidden");
+        } catch (err) {
+          console.error(err);
+          messageDiv.textContent =
+            "Erro de conexão ao enviar o cadastro. Tente novamente.";
+          messageDiv.classList.add("text-red-600");
+        }
+      });
+    </script>
   </body>
 </html>
