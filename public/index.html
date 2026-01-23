@@ -25,9 +25,9 @@
           </h2>
           <div class="grid md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Nome do homem</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Nome do homem
+              </label>
               <input
                 type="text"
                 id="name_person_1"
@@ -36,9 +36,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Nome da mulher</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Nome da mulher
+              </label>
               <input
                 type="text"
                 id="name_person_2"
@@ -47,9 +47,9 @@
               />
             </div>
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Nome do casal (como será exibido)</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Nome do casal (como será exibido)
+              </label>
               <input
                 type="text"
                 id="name_couple"
@@ -71,9 +71,12 @@
           </h2>
           <div class="grid md:grid-cols-3 gap-4">
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Nascimento do homem</label
+              <label
+                id="label_birth_person_1"
+                class="block text-sm font-medium text-slate-600 mb-1"
               >
+                Nascimento do homem
+              </label>
               <input
                 type="date"
                 id="birth_person_1"
@@ -81,9 +84,12 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Nascimento da mulher</label
+              <label
+                id="label_birth_person_2"
+                class="block text-sm font-medium text-slate-600 mb-1"
               >
+                Nascimento da mulher
+              </label>
               <input
                 type="date"
                 id="birth_person_2"
@@ -91,9 +97,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Aniversário de casamento</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Aniversário de casamento
+              </label>
               <input
                 type="date"
                 id="wedding_date"
@@ -110,9 +116,12 @@
           </h2>
           <div class="grid md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Telefone do homem</label
+              <label
+                id="label_phone_person_1"
+                class="block text-sm font-medium text-slate-600 mb-1"
               >
+                Telefone do homem
+              </label>
               <input
                 type="text"
                 id="phone_person_1"
@@ -120,9 +129,12 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >E-mail do homem</label
+              <label
+                id="label_email_person_1"
+                class="block text-sm font-medium text-slate-600 mb-1"
               >
+                E-mail do homem
+              </label>
               <input
                 type="email"
                 id="email_person_1"
@@ -130,9 +142,12 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Telefone da mulher</label
+              <label
+                id="label_phone_person_2"
+                class="block text-sm font-medium text-slate-600 mb-1"
               >
+                Telefone da mulher
+              </label>
               <input
                 type="text"
                 id="phone_person_2"
@@ -140,9 +155,12 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >E-mail da mulher</label
+              <label
+                id="label_email_person_2"
+                class="block text-sm font-medium text-slate-600 mb-1"
               >
+                E-mail da mulher
+              </label>
               <input
                 type="email"
                 id="email_person_2"
@@ -150,9 +168,9 @@
               />
             </div>
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Endereço do casal</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Endereço do casal
+              </label>
               <input
                 type="text"
                 id="address"
@@ -162,14 +180,14 @@
           </div>
         </section>
 
-        <!-- Filhos (igual antes) -->
+        <!-- Filhos -->
         <section>
           <h2 class="text-lg font-semibold text-slate-700 mb-3">Filhos</h2>
           <div class="grid md:grid-cols-3 gap-4 items-end">
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Tem filhos?</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Tem filhos?
+              </label>
               <select
                 id="has_children"
                 class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
@@ -179,9 +197,9 @@
               </select>
             </div>
             <div id="children_count_wrapper" class="hidden">
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Quantos filhos?</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Quantos filhos?
+              </label>
               <input
                 type="number"
                 min="1"
@@ -200,22 +218,27 @@
           <div class="space-y-4">
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1"
-                  >Situação do homem</label
+                <label
+                  id="label_membership_status_1"
+                  class="block text-sm font-medium text-slate-600 mb-1"
                 >
+                  Situação do homem
+                </label>
                 <select
                   id="membership_status_1"
                   class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                 >
                   <option value="ibvp">Membro da IBVP</option>
                   <option value="other">Membro de outra igreja</option>
-                  <option value="none">Não é membro de nenhuma igreja</option>
+                  <option value="none">
+                    Não é membro de nenhuma igreja
+                  </option>
                 </select>
               </div>
               <div id="other_church_1_wrapper" class="hidden">
-                <label class="block text-sm font-medium text-slate-600 mb-1"
-                  >Se é membro de outra igreja, qual?</label
-                >
+                <label class="block text-sm font-medium text-slate-600 mb-1">
+                  Se é membro de outra igreja, qual?
+                </label>
                 <input
                   type="text"
                   id="other_church_1"
@@ -226,22 +249,27 @@
 
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1"
-                  >Situação da mulher</label
+                <label
+                  id="label_membership_status_2"
+                  class="block text-sm font-medium text-slate-600 mb-1"
                 >
+                  Situação da mulher
+                </label>
                 <select
                   id="membership_status_2"
                   class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                 >
                   <option value="ibvp">Membro da IBVP</option>
                   <option value="other">Membro de outra igreja</option>
-                  <option value="none">Não é membro de nenhuma igreja</option>
+                  <option value="none">
+                    Não é membro de nenhuma igreja
+                  </option>
                 </select>
               </div>
               <div id="other_church_2_wrapper" class="hidden">
-                <label class="block text-sm font-medium text-slate-600 mb-1"
-                  >Se é membro de outra igreja, qual?</label
-                >
+                <label class="block text-sm font-medium text-slate-600 mb-1">
+                  Se é membro de outra igreja, qual?
+                </label>
                 <input
                   type="text"
                   id="other_church_2"
@@ -251,9 +279,9 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1"
-                >Há quanto tempo o casal frequenta a IBVP?</label
-              >
+              <label class="block text-sm font-medium text-slate-600 mb-1">
+                Há quanto tempo o casal frequenta a IBVP?
+              </label>
               <input
                 type="text"
                 id="membership_time"
@@ -266,7 +294,9 @@
 
         <!-- Observações -->
         <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">Observações</h2>
+          <h2 class="text-lg font-semibold text-slate-700 mb-3">
+            Observações
+          </h2>
           <textarea
             id="notes"
             rows="3"
@@ -306,6 +336,68 @@
         document.getElementById("other_church_2_wrapper");
       const otherChurch1 = document.getElementById("other_church_1");
       const otherChurch2 = document.getElementById("other_church_2");
+
+      // Campos de nome e labels dinâmicas
+      const namePerson1Input = document.getElementById("name_person_1");
+      const namePerson2Input = document.getElementById("name_person_2");
+
+      const labelBirth1 = document.getElementById("label_birth_person_1");
+      const labelBirth2 = document.getElementById("label_birth_person_2");
+      const labelPhone1 = document.getElementById("label_phone_person_1");
+      const labelEmail1 = document.getElementById("label_email_person_1");
+      const labelPhone2 = document.getElementById("label_phone_person_2");
+      const labelEmail2 = document.getElementById("label_email_person_2");
+      const labelMembership1 = document.getElementById(
+        "label_membership_status_1"
+      );
+      const labelMembership2 = document.getElementById(
+        "label_membership_status_2"
+      );
+
+      function updateNameLabels() {
+        const n1 = namePerson1Input.value.trim();
+        const n2 = namePerson2Input.value.trim();
+
+        // Datas
+        labelBirth1.textContent = n1
+          ? `Nascimento de ${n1}`
+          : "Nascimento do homem";
+
+        labelBirth2.textContent = n2
+          ? `Nascimento de ${n2}`
+          : "Nascimento da mulher";
+
+        // Telefones
+        labelPhone1.textContent = n1
+          ? `Telefone de ${n1}`
+          : "Telefone do homem";
+
+        labelPhone2.textContent = n2
+          ? `Telefone de ${n2}`
+          : "Telefone da mulher";
+
+        // E-mails
+        labelEmail1.textContent = n1
+          ? `E-mail de ${n1}`
+          : "E-mail do homem";
+
+        labelEmail2.textContent = n2
+          ? `E-mail de ${n2}`
+          : "E-mail da mulher";
+
+        // Situação na igreja
+        labelMembership1.textContent = n1
+          ? `Situação de ${n1} na igreja`
+          : "Situação do homem";
+
+        labelMembership2.textContent = n2
+          ? `Situação de ${n2} na igreja`
+          : "Situação da mulher";
+      }
+
+      namePerson1Input.addEventListener("input", updateNameLabels);
+      namePerson2Input.addEventListener("input", updateNameLabels);
+      updateNameLabels();
 
       // Mostrar / esconder quantidade de filhos
       hasChildrenSelect.addEventListener("change", () => {
@@ -486,6 +578,7 @@
           childrenFieldsContainer.innerHTML = "";
           childrenCountWrapper.classList.add("hidden");
           updateOtherChurchVisibility();
+          updateNameLabels();
         } catch (err) {
           console.error(err);
           messageDiv.textContent =
