@@ -1,456 +1,379 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>Cadastro de Famílias - IBVP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="min-h-screen bg-slate-100 flex items-center justify-center py-10">
+</head>
+
+<body class="min-h-screen bg-slate-100 flex items-center justify-center py-10">
     <div class="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8">
-      <header class="mb-8 text-center">
-        <h1 class="text-2xl font-bold text-slate-800">
-          Ministério de Famílias - IBVP
-        </h1>
-        <p class="text-sm text-slate-500 mt-1">
-          Formulário de cadastro de famílias
-        </p>
-      </header>
+        <header class="mb-8">
+            <div class="flex flex-col items-center gap-3">
+                <div class="flex items-center gap-3">
+                    <img src="logo-ibvp.png" alt="Igreja Batista de Vargem Pequena" class="h-12 w-auto" />
+                    <div class="text-left">
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                            Igreja Batista de Vargem Pequena
+                        </p>
+                        <h1 class="text-2xl font-bold text-slate-800">
+                            Ministério de Famílias
+                        </h1>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-500 mt-1">
+                    Formulário de cadastro de famílias
+                </p>
+            </div>
+        </header>
 
-      <form id="casalForm" class="space-y-6">
-        <!-- Dados do casal -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">
-            Dados do casal
-          </h2>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Nome do homem
-              </label>
-              <input
-                type="text"
-                id="name_person_1"
-                required
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Nome da mulher
-              </label>
-              <input
-                type="text"
-                id="name_person_2"
-                required
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Nome do casal (como será exibido)
-              </label>
-              <input
-                type="text"
-                id="name_couple"
-                placeholder="Ex.: João e Maria"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-              <p class="text-xs text-slate-400 mt-1">
-                Se deixar em branco, será montado automaticamente com o nome do
-                homem e da mulher.
-              </p>
-            </div>
-          </div>
-        </section>
 
-        <!-- Datas importantes -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">
-            Datas importantes
-          </h2>
-          <div class="grid md:grid-cols-3 gap-4">
-            <div>
-              <label
-                id="label_birth_person_1"
-                class="block text-sm font-medium text-slate-600 mb-1"
-              >
-                Nascimento do homem
-              </label>
-              <input
-                type="date"
-                id="birth_person_1"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div>
-              <label
-                id="label_birth_person_2"
-                class="block text-sm font-medium text-slate-600 mb-1"
-              >
-                Nascimento da mulher
-              </label>
-              <input
-                type="date"
-                id="birth_person_2"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Aniversário de casamento
-              </label>
-              <input
-                type="date"
-                id="wedding_date"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-          </div>
-        </section>
+        <form id="casalForm" class="space-y-6">
+            <!-- Dados do casal -->
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Dados do casal
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Nome do homem
+                        </label>
+                        <input type="text" id="name_person_1" required
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Nome da mulher
+                        </label>
+                        <input type="text" id="name_person_2" required
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Nome do casal (como será exibido)
+                        </label>
+                        <input type="text" id="name_couple" placeholder="Ex.: João e Maria"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        <p class="text-xs text-slate-400 mt-1">
+                            Se deixar em branco, será montado automaticamente com o nome do
+                            homem e da mulher.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-        <!-- Contato -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">
-            Contato e endereço
-          </h2>
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label
-                id="label_phone_person_1"
-                class="block text-sm font-medium text-slate-600 mb-1"
-              >
-                Telefone do homem
-              </label>
-              <input
-                type="text"
-                id="phone_person_1"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div>
-              <label
-                id="label_email_person_1"
-                class="block text-sm font-medium text-slate-600 mb-1"
-              >
-                E-mail do homem
-              </label>
-              <input
-                type="email"
-                id="email_person_1"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div>
-              <label
-                id="label_phone_person_2"
-                class="block text-sm font-medium text-slate-600 mb-1"
-              >
-                Telefone da mulher
-              </label>
-              <input
-                type="text"
-                id="phone_person_2"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div>
-              <label
-                id="label_email_person_2"
-                class="block text-sm font-medium text-slate-600 mb-1"
-              >
-                E-mail da mulher
-              </label>
-              <input
-                type="email"
-                id="email_person_2"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Endereço do casal
-              </label>
-              <input
-                type="text"
-                id="address"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-          </div>
-        </section>
+            <!-- Datas importantes -->
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Datas importantes
+                </h2>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label id="label_birth_person_1" class="block text-sm font-medium text-slate-600 mb-1">
+                            Nascimento do homem
+                        </label>
+                        <input type="date" id="birth_person_1"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label id="label_birth_person_2" class="block text-sm font-medium text-slate-600 mb-1">
+                            Nascimento da mulher
+                        </label>
+                        <input type="date" id="birth_person_2"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Aniversário de casamento
+                        </label>
+                        <input type="date" id="wedding_date"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                </div>
+            </section>
 
-        <!-- Filhos -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">Filhos</h2>
-          <div class="grid md:grid-cols-3 gap-4 items-end">
-            <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Tem filhos?
-              </label>
-              <select
-                id="has_children"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              >
-                <option value="no">Não</option>
-                <option value="yes">Sim</option>
-              </select>
-            </div>
-            <div id="children_count_wrapper" class="hidden">
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Quantos filhos?
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="10"
-                id="children_count"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-          </div>
-          <div id="children_fields" class="mt-4 space-y-4"></div>
-        </section>
+            <!-- Contato -->
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Contato e endereço
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label id="label_phone_person_1" class="block text-sm font-medium text-slate-600 mb-1">
+                            Telefone do homem
+                        </label>
+                        <input type="text" id="phone_person_1"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label id="label_email_person_1" class="block text-sm font-medium text-slate-600 mb-1">
+                            E-mail do homem
+                        </label>
+                        <input type="email" id="email_person_1"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label id="label_phone_person_2" class="block text-sm font-medium text-slate-600 mb-1">
+                            Telefone da mulher
+                        </label>
+                        <input type="text" id="phone_person_2"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label id="label_email_person_2" class="block text-sm font-medium text-slate-600 mb-1">
+                            E-mail da mulher
+                        </label>
+                        <input type="email" id="email_person_2"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Endereço do casal
+                        </label>
+                        <input type="text" id="address"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                </div>
+            </section>
 
-        <!-- Igreja -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">Igreja</h2>
-          <div class="space-y-4">
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  id="label_membership_status_1"
-                  class="block text-sm font-medium text-slate-600 mb-1"
-                >
-                  Situação do homem
+            <!-- Filhos -->
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">Filhos</h2>
+                <div class="grid md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Tem filhos?
+                        </label>
+                        <select id="has_children"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                            <option value="no">Não</option>
+                            <option value="yes">Sim</option>
+                        </select>
+                    </div>
+                    <div id="children_count_wrapper" class="hidden">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Quantos filhos?
+                        </label>
+                        <input type="number" min="1" max="10" id="children_count"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                </div>
+                <div id="children_fields" class="mt-4 space-y-4"></div>
+            </section>
+
+            <!-- Igreja -->
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">Igreja</h2>
+                <div class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label id="label_membership_status_1" class="block text-sm font-medium text-slate-600 mb-1">
+                                Situação do homem
+                            </label>
+                            <select id="membership_status_1"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                                <option value="ibvp">Membro da IBVP</option>
+                                <option value="other">Membro de outra igreja</option>
+                                <option value="none">
+                                    Não é membro de nenhuma igreja
+                                </option>
+                            </select>
+                        </div>
+                        <div id="other_church_1_wrapper" class="hidden">
+                            <label class="block text-sm font-medium text-slate-600 mb-1">
+                                Qual?
+                            </label>
+                            <input type="text" id="other_church_1"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label id="label_membership_status_2" class="block text-sm font-medium text-slate-600 mb-1">
+                                Situação da mulher
+                            </label>
+                            <select id="membership_status_2"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                                <option value="ibvp">Membro da IBVP</option>
+                                <option value="other">Membro de outra igreja</option>
+                                <option value="none">
+                                    Não é membro de nenhuma igreja
+                                </option>
+                            </select>
+                        </div>
+                        <div id="other_church_2_wrapper" class="hidden">
+                            <label class="block text-sm font-medium text-slate-600 mb-1">
+                                Qual?
+                            </label>
+                            <input type="text" id="other_church_2"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Há quanto tempo o casal frequenta a IBVP?
+                        </label>
+                        <input type="text" id="membership_time" placeholder="Ex.: 5 anos, desde 2018..."
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- Autorização de uso dos dados -->
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Autorização de uso dos dados
+                </h2>
+                <label class="flex items-start gap-2 text-sm text-slate-700">
+                    <input type="checkbox" id="consent" class="mt-1 rounded border-slate-300" />
+                    <span>
+                        Autorizo o Ministério de Famílias da IBVP a coletar e utilizar
+                        meus dados pessoais e os de minha família exclusivamente para fins
+                        de contato pastoral, organização de eventos e comunicações
+                        internas da igreja. Estou ciente de que meus dados serão tratados
+                        conforme a Lei Geral de Proteção de Dados (LGPD – Lei nº
+                        13.709/2018), não serão compartilhados com terceiros e poderão ser
+                        atualizados ou excluídos a qualquer momento mediante solicitação.
+                    </span>
                 </label>
-                <select
-                  id="membership_status_1"
-                  class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                >
-                  <option value="ibvp">Membro da IBVP</option>
-                  <option value="other">Membro de outra igreja</option>
-                  <option value="none">
-                    Não é membro de nenhuma igreja
-                  </option>
-                </select>
-              </div>
-              <div id="other_church_1_wrapper" class="hidden">
-                <label class="block text-sm font-medium text-slate-600 mb-1">
-                  Qual?
-                </label>
-                <input
-                  type="text"
-                  id="other_church_1"
-                  class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                />
-              </div>
+                <p class="text-xs text-slate-400 mt-1">
+                    Em caso de dúvidas ou pedidos de atualização/exclusão de dados,
+                    procure a liderança do Ministério de Famílias da IBVP.
+                </p>
+            </section>
+
+            <!-- Observações -->
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Observações
+                </h2>
+                <textarea id="notes" rows="3"
+                    class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"></textarea>
+            </section>
+
+            <div id="message" class="text-sm"></div>
+
+            <div class="flex justify-end pt-2">
+                <button type="submit"
+                    class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:opacity-60">
+                    Enviar cadastro
+                </button>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  id="label_membership_status_2"
-                  class="block text-sm font-medium text-slate-600 mb-1"
-                >
-                  Situação da mulher
-                </label>
-                <select
-                  id="membership_status_2"
-                  class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                >
-                  <option value="ibvp">Membro da IBVP</option>
-                  <option value="other">Membro de outra igreja</option>
-                  <option value="none">
-                    Não é membro de nenhuma igreja
-                  </option>
-                </select>
-              </div>
-              <div id="other_church_2_wrapper" class="hidden">
-                <label class="block text-sm font-medium text-slate-600 mb-1">
-                  Qual?
-                </label>
-                <input
-                  type="text"
-                  id="other_church_2"
-                  class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-slate-600 mb-1">
-                Há quanto tempo o casal frequenta a IBVP?
-              </label>
-              <input
-                type="text"
-                id="membership_time"
-                placeholder="Ex.: 5 anos, desde 2018..."
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
-          </div>
-        </section>
-
-        <!-- Autorização de uso dos dados -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">
-            Autorização de uso dos dados
-          </h2>
-          <label class="flex items-start gap-2 text-sm text-slate-700">
-            <input
-              type="checkbox"
-              id="consent"
-              class="mt-1 rounded border-slate-300"
-            />
-            <span>
-              Autorizo o Ministério de Famílias da IBVP a coletar e utilizar
-              meus dados pessoais e os de minha família exclusivamente para fins
-              de contato pastoral, organização de eventos e comunicações
-              internas da igreja. Estou ciente de que meus dados serão tratados
-              conforme a Lei Geral de Proteção de Dados (LGPD – Lei nº
-              13.709/2018), não serão compartilhados com terceiros e poderão ser
-              atualizados ou excluídos a qualquer momento mediante solicitação.
-            </span>
-          </label>
-          <p class="text-xs text-slate-400 mt-1">
-            Em caso de dúvidas ou pedidos de atualização/exclusão de dados,
-            procure a liderança do Ministério de Famílias da IBVP.
-          </p>
-        </section>
-
-        <!-- Observações -->
-        <section>
-          <h2 class="text-lg font-semibold text-slate-700 mb-3">
-            Observações
-          </h2>
-          <textarea
-            id="notes"
-            rows="3"
-            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-          ></textarea>
-        </section>
-
-        <div id="message" class="text-sm"></div>
-
-        <div class="flex justify-end pt-2">
-          <button
-            type="submit"
-            class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:opacity-60"
-          >
-            Enviar cadastro
-          </button>
-        </div>
-      </form>
+        </form>
     </div>
 
     <script>
-      const hasChildrenSelect = document.getElementById("has_children");
-      const childrenCountWrapper = document.getElementById(
-        "children_count_wrapper"
-      );
-      const childrenCountInput = document.getElementById("children_count");
-      const childrenFieldsContainer =
-        document.getElementById("children_fields");
-      const form = document.getElementById("casalForm");
-      const messageDiv = document.getElementById("message");
+        const hasChildrenSelect = document.getElementById("has_children");
+        const childrenCountWrapper = document.getElementById(
+            "children_count_wrapper"
+        );
+        const childrenCountInput = document.getElementById("children_count");
+        const childrenFieldsContainer =
+            document.getElementById("children_fields");
+        const form = document.getElementById("casalForm");
+        const messageDiv = document.getElementById("message");
 
-      const membershipStatus1 = document.getElementById("membership_status_1");
-      const membershipStatus2 = document.getElementById("membership_status_2");
-      const otherChurch1Wrapper =
-        document.getElementById("other_church_1_wrapper");
-      const otherChurch2Wrapper =
-        document.getElementById("other_church_2_wrapper");
-      const otherChurch1 = document.getElementById("other_church_1");
-      const otherChurch2 = document.getElementById("other_church_2");
+        const membershipStatus1 = document.getElementById("membership_status_1");
+        const membershipStatus2 = document.getElementById("membership_status_2");
+        const otherChurch1Wrapper =
+            document.getElementById("other_church_1_wrapper");
+        const otherChurch2Wrapper =
+            document.getElementById("other_church_2_wrapper");
+        const otherChurch1 = document.getElementById("other_church_1");
+        const otherChurch2 = document.getElementById("other_church_2");
 
-      const consentCheckbox = document.getElementById("consent");
+        const consentCheckbox = document.getElementById("consent");
 
-      // Campos de nome e labels dinâmicas
-      const namePerson1Input = document.getElementById("name_person_1");
-      const namePerson2Input = document.getElementById("name_person_2");
+        // Campos de nome e labels dinâmicas
+        const namePerson1Input = document.getElementById("name_person_1");
+        const namePerson2Input = document.getElementById("name_person_2");
 
-      const labelBirth1 = document.getElementById("label_birth_person_1");
-      const labelBirth2 = document.getElementById("label_birth_person_2");
-      const labelPhone1 = document.getElementById("label_phone_person_1");
-      const labelEmail1 = document.getElementById("label_email_person_1");
-      const labelPhone2 = document.getElementById("label_phone_person_2");
-      const labelEmail2 = document.getElementById("label_email_person_2");
-      const labelMembership1 = document.getElementById(
-        "label_membership_status_1"
-      );
-      const labelMembership2 = document.getElementById(
-        "label_membership_status_2"
-      );
+        const labelBirth1 = document.getElementById("label_birth_person_1");
+        const labelBirth2 = document.getElementById("label_birth_person_2");
+        const labelPhone1 = document.getElementById("label_phone_person_1");
+        const labelEmail1 = document.getElementById("label_email_person_1");
+        const labelPhone2 = document.getElementById("label_phone_person_2");
+        const labelEmail2 = document.getElementById("label_email_person_2");
+        const labelMembership1 = document.getElementById(
+            "label_membership_status_1"
+        );
+        const labelMembership2 = document.getElementById(
+            "label_membership_status_2"
+        );
 
-      function updateNameLabels() {
-        const n1 = namePerson1Input.value.trim();
-        const n2 = namePerson2Input.value.trim();
+        function updateNameLabels() {
+            const n1 = namePerson1Input.value.trim();
+            const n2 = namePerson2Input.value.trim();
 
-        // Datas
-        labelBirth1.textContent = n1
-          ? `Nascimento de ${n1}`
-          : "Nascimento do homem";
+            // Datas
+            labelBirth1.textContent = n1
+                ? `Nascimento de ${n1}`
+                : "Nascimento do homem";
 
-        labelBirth2.textContent = n2
-          ? `Nascimento de ${n2}`
-          : "Nascimento da mulher";
+            labelBirth2.textContent = n2
+                ? `Nascimento de ${n2}`
+                : "Nascimento da mulher";
 
-        // Telefones
-        labelPhone1.textContent = n1
-          ? `Telefone de ${n1}`
-          : "Telefone do homem";
+            // Telefones
+            labelPhone1.textContent = n1
+                ? `Telefone de ${n1}`
+                : "Telefone do homem";
 
-        labelPhone2.textContent = n2
-          ? `Telefone de ${n2}`
-          : "Telefone da mulher";
+            labelPhone2.textContent = n2
+                ? `Telefone de ${n2}`
+                : "Telefone da mulher";
 
-        // E-mails
-        labelEmail1.textContent = n1
-          ? `E-mail de ${n1}`
-          : "E-mail do homem";
+            // E-mails
+            labelEmail1.textContent = n1
+                ? `E-mail de ${n1}`
+                : "E-mail do homem";
 
-        labelEmail2.textContent = n2
-          ? `E-mail de ${n2}`
-          : "E-mail da mulher";
+            labelEmail2.textContent = n2
+                ? `E-mail de ${n2}`
+                : "E-mail da mulher";
 
-        // Situação na igreja
-        labelMembership1.textContent = n1
-          ? `Situação de ${n1} na igreja`
-          : "Situação do homem";
+            // Situação na igreja
+            labelMembership1.textContent = n1
+                ? `Situação de ${n1} na igreja`
+                : "Situação do homem";
 
-        labelMembership2.textContent = n2
-          ? `Situação de ${n2} na igreja`
-          : "Situação da mulher";
-      }
-
-      namePerson1Input.addEventListener("input", updateNameLabels);
-      namePerson2Input.addEventListener("input", updateNameLabels);
-      updateNameLabels();
-
-      // Mostrar / esconder quantidade de filhos
-      hasChildrenSelect.addEventListener("change", () => {
-        if (hasChildrenSelect.value === "yes") {
-          childrenCountWrapper.classList.remove("hidden");
-        } else {
-          childrenCountWrapper.classList.add("hidden");
-          childrenFieldsContainer.innerHTML = "";
-          childrenCountInput.value = "";
+            labelMembership2.textContent = n2
+                ? `Situação de ${n2} na igreja`
+                : "Situação da mulher";
         }
-      });
 
-      // Gerar campos de filhos
-      childrenCountInput.addEventListener("input", () => {
-        const count = parseInt(childrenCountInput.value, 10);
-        childrenFieldsContainer.innerHTML = "";
-        if (!count || count < 1) return;
-        const safeCount = Math.min(count, 10);
+        namePerson1Input.addEventListener("input", updateNameLabels);
+        namePerson2Input.addEventListener("input", updateNameLabels);
+        updateNameLabels();
 
-        for (let i = 1; i <= safeCount; i++) {
-          const wrapper = document.createElement("div");
-          wrapper.className =
-            "grid md:grid-cols-2 gap-4 border border-slate-200 rounded-xl p-3";
-          wrapper.innerHTML = `
+        // Mostrar / esconder quantidade de filhos
+        hasChildrenSelect.addEventListener("change", () => {
+            if (hasChildrenSelect.value === "yes") {
+                childrenCountWrapper.classList.remove("hidden");
+            } else {
+                childrenCountWrapper.classList.add("hidden");
+                childrenFieldsContainer.innerHTML = "";
+                childrenCountInput.value = "";
+            }
+        });
+
+        // Gerar campos de filhos
+        childrenCountInput.addEventListener("input", () => {
+            const count = parseInt(childrenCountInput.value, 10);
+            childrenFieldsContainer.innerHTML = "";
+            if (!count || count < 1) return;
+            const safeCount = Math.min(count, 10);
+
+            for (let i = 1; i <= safeCount; i++) {
+                const wrapper = document.createElement("div");
+                wrapper.className =
+                    "grid md:grid-cols-2 gap-4 border border-slate-200 rounded-xl p-3";
+                wrapper.innerHTML = `
             <div>
               <label class="block text-sm font-medium text-slate-600 mb-1">
                 Nome do filho ${i}
@@ -472,156 +395,157 @@
               />
             </div>
           `;
-          childrenFieldsContainer.appendChild(wrapper);
-        }
-      });
-
-      // Mostrar / esconder campos de "outra igreja"
-      function updateOtherChurchVisibility() {
-        if (membershipStatus1.value === "other") {
-          otherChurch1Wrapper.classList.remove("hidden");
-        } else {
-          otherChurch1Wrapper.classList.add("hidden");
-          otherChurch1.value = "";
-        }
-
-        if (membershipStatus2.value === "other") {
-          otherChurch2Wrapper.classList.remove("hidden");
-        } else {
-          otherChurch2Wrapper.classList.add("hidden");
-          otherChurch2.value = "";
-        }
-      }
-
-      membershipStatus1.addEventListener("change", updateOtherChurchVisibility);
-      membershipStatus2.addEventListener("change", updateOtherChurchVisibility);
-      updateOtherChurchVisibility();
-
-      // Envio do formulário
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        messageDiv.textContent = "";
-        messageDiv.className = "text-sm";
-
-        const name1 = document.getElementById("name_person_1").value.trim();
-        const name2 = document.getElementById("name_person_2").value.trim();
-        let nameCouple = document.getElementById("name_couple").value.trim();
-
-        if (!name1 || !name2) {
-          messageDiv.textContent =
-            "Por favor, preencha o nome do homem e da mulher.";
-          messageDiv.classList.add("text-red-600");
-          return;
-        }
-
-        if (!consentCheckbox.checked) {
-          messageDiv.textContent =
-            "Para prosseguir, é preciso autorizar o uso dos dados.";
-          messageDiv.classList.add("text-red-600");
-          return;
-        }
-
-        if (!nameCouple) {
-          nameCouple = name1 + " e " + name2;
-        }
-
-        // filhos
-        const children = [];
-        if (hasChildrenSelect.value === "yes") {
-          const count = parseInt(childrenCountInput.value, 10) || 0;
-          for (let i = 1; i <= count; i++) {
-            const nameInput = document.querySelector(
-              `[data-child-name="${i}"]`
-            );
-            const birthInput = document.querySelector(
-              `[data-child-birth="${i}"]`
-            );
-            if (nameInput && nameInput.value.trim()) {
-              children.push({
-                name: nameInput.value.trim(),
-                birth: birthInput?.value || null,
-              });
+                childrenFieldsContainer.appendChild(wrapper);
             }
-          }
+        });
+
+        // Mostrar / esconder campos de "outra igreja"
+        function updateOtherChurchVisibility() {
+            if (membershipStatus1.value === "other") {
+                otherChurch1Wrapper.classList.remove("hidden");
+            } else {
+                otherChurch1Wrapper.classList.add("hidden");
+                otherChurch1.value = "";
+            }
+
+            if (membershipStatus2.value === "other") {
+                otherChurch2Wrapper.classList.remove("hidden");
+            } else {
+                otherChurch2Wrapper.classList.add("hidden");
+                otherChurch2.value = "";
+            }
         }
 
-        const status1 = membershipStatus1.value; // ibvp | other | none
-        const status2 = membershipStatus2.value;
+        membershipStatus1.addEventListener("change", updateOtherChurchVisibility);
+        membershipStatus2.addEventListener("change", updateOtherChurchVisibility);
+        updateOtherChurchVisibility();
 
-        const payload = {
-          name_couple: nameCouple,
-          name_person_1: name1,
-          name_person_2: name2,
+        // Envio do formulário
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            messageDiv.textContent = "";
+            messageDiv.className = "text-sm";
 
-          birth_person_1:
-            document.getElementById("birth_person_1").value || null,
-          birth_person_2:
-            document.getElementById("birth_person_2").value || null,
-          wedding_date: document.getElementById("wedding_date").value || null,
+            const name1 = document.getElementById("name_person_1").value.trim();
+            const name2 = document.getElementById("name_person_2").value.trim();
+            let nameCouple = document.getElementById("name_couple").value.trim();
 
-          phone_person_1:
-            document.getElementById("phone_person_1").value || null,
-          phone_person_2:
-            document.getElementById("phone_person_2").value || null,
-          email_person_1:
-            document.getElementById("email_person_1").value || null,
-          email_person_2:
-            document.getElementById("email_person_2").value || null,
+            if (!name1 || !name2) {
+                messageDiv.textContent =
+                    "Por favor, preencha o nome do homem e da mulher.";
+                messageDiv.classList.add("text-red-600");
+                return;
+            }
 
-          address: document.getElementById("address").value || null,
+            if (!consentCheckbox.checked) {
+                messageDiv.textContent =
+                    "Para prosseguir, é preciso autorizar o uso dos dados.";
+                messageDiv.classList.add("text-red-600");
+                return;
+            }
 
-          children: children.length > 0 ? children : null,
+            if (!nameCouple) {
+                nameCouple = name1 + " e " + name2;
+            }
 
-          // nível casal: considera casal "membro da IBVP" se os dois forem da IBVP
-          is_member: status1 === "ibvp" && status2 === "ibvp",
-          membership_time:
-            document.getElementById("membership_time").value || null,
+            // filhos
+            const children = [];
+            if (hasChildrenSelect.value === "yes") {
+                const count = parseInt(childrenCountInput.value, 10) || 0;
+                for (let i = 1; i <= count; i++) {
+                    const nameInput = document.querySelector(
+                        `[data-child-name="${i}"]`
+                    );
+                    const birthInput = document.querySelector(
+                        `[data-child-birth="${i}"]`
+                    );
+                    if (nameInput && nameInput.value.trim()) {
+                        children.push({
+                            name: nameInput.value.trim(),
+                            birth: birthInput?.value || null,
+                        });
+                    }
+                }
+            }
 
-          // nível indivíduo: membro da IBVP?
-          is_member_person_1: status1 === "ibvp",
-          is_member_person_2: status2 === "ibvp",
+            const status1 = membershipStatus1.value; // ibvp | other | none
+            const status2 = membershipStatus2.value;
 
-          other_church_person_1:
-            status1 === "other" ? otherChurch1.value || null : null,
-          other_church_person_2:
-            status2 === "other" ? otherChurch2.value || null : null,
+            const payload = {
+                name_couple: nameCouple,
+                name_person_1: name1,
+                name_person_2: name2,
 
-          notes: document.getElementById("notes").value || null,
-        };
+                birth_person_1:
+                    document.getElementById("birth_person_1").value || null,
+                birth_person_2:
+                    document.getElementById("birth_person_2").value || null,
+                wedding_date: document.getElementById("wedding_date").value || null,
 
-        try {
-          const response = await fetch("/.netlify/functions/createCouple", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
+                phone_person_1:
+                    document.getElementById("phone_person_1").value || null,
+                phone_person_2:
+                    document.getElementById("phone_person_2").value || null,
+                email_person_1:
+                    document.getElementById("email_person_1").value || null,
+                email_person_2:
+                    document.getElementById("email_person_2").value || null,
 
-          const data = await response.json();
+                address: document.getElementById("address").value || null,
 
-          if (!response.ok || !data.ok) {
-            console.error("Erro na API:", data);
-            messageDiv.textContent =
-              "Ocorreu um erro ao salvar o cadastro. Tente novamente.";
-            messageDiv.classList.add("text-red-600");
-            return;
-          }
+                children: children.length > 0 ? children : null,
 
-          messageDiv.textContent =
-            "Cadastro enviado com sucesso! Muito obrigado 😊";
-          messageDiv.classList.add("text-emerald-600");
+                // nível casal: considera casal "membro da IBVP" se os dois forem da IBVP
+                is_member: status1 === "ibvp" && status2 === "ibvp",
+                membership_time:
+                    document.getElementById("membership_time").value || null,
 
-          form.reset();
-          childrenFieldsContainer.innerHTML = "";
-          childrenCountWrapper.classList.add("hidden");
-          updateOtherChurchVisibility();
-          updateNameLabels();
-        } catch (err) {
-          console.error(err);
-          messageDiv.textContent =
-            "Erro de conexão ao enviar o cadastro. Tente novamente.";
-          messageDiv.classList.add("text-red-600");
-        }
-      });
+                // nível indivíduo: membro da IBVP?
+                is_member_person_1: status1 === "ibvp",
+                is_member_person_2: status2 === "ibvp",
+
+                other_church_person_1:
+                    status1 === "other" ? otherChurch1.value || null : null,
+                other_church_person_2:
+                    status2 === "other" ? otherChurch2.value || null : null,
+
+                notes: document.getElementById("notes").value || null,
+            };
+
+            try {
+                const response = await fetch("/.netlify/functions/createCouple", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.ok) {
+                    console.error("Erro na API:", data);
+                    messageDiv.textContent =
+                        "Ocorreu um erro ao salvar o cadastro. Tente novamente.";
+                    messageDiv.classList.add("text-red-600");
+                    return;
+                }
+
+                messageDiv.textContent =
+                    "Cadastro enviado com sucesso! Muito obrigado 😊";
+                messageDiv.classList.add("text-emerald-600");
+
+                form.reset();
+                childrenFieldsContainer.innerHTML = "";
+                childrenCountWrapper.classList.add("hidden");
+                updateOtherChurchVisibility();
+                updateNameLabels();
+            } catch (err) {
+                console.error(err);
+                messageDiv.textContent =
+                    "Erro de conexão ao enviar o cadastro. Tente novamente.";
+                messageDiv.classList.add("text-red-600");
+            }
+        });
     </script>
-  </body>
+</body>
+
 </html>

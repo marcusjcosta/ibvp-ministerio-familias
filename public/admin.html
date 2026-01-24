@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>Painel - Ministério de Famílias IBVP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,570 +10,534 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <!-- SheetJS para Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  </head>
-  <body class="min-h-screen bg-slate-100">
+</head>
+
+<body class="min-h-screen bg-slate-100">
     <div class="max-w-5xl mx-auto px-4 py-8">
-      <!-- Título -->
-      <header class="mb-6">
-        <h1 class="text-2xl font-bold text-slate-800">
-          Ministério de Famílias - IBVP
-        </h1>
-        <p class="text-sm text-slate-500">
-          Painel interno para acompanhamento das famílias cadastradas
-        </p>
-      </header>
-
-      <!-- LOGIN -->
-      <section id="loginSection" class="max-w-sm bg-white rounded-2xl shadow p-6">
-        <h2 class="text-lg font-semibold text-slate-700 mb-4">Acesso ao painel</h2>
-        <label class="block text-sm font-medium text-slate-600 mb-1" for="adminPassword">
-          Senha
-        </label>
-        <input
-          id="adminPassword"
-          type="password"
-          class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-        />
-        <p id="loginError" class="text-xs text-red-600 mt-2 hidden">
-          Senha incorreta. Tente novamente.
-        </p>
-        <button
-          id="loginButton"
-          class="mt-4 inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-        >
-          Entrar
-        </button>
-      </section>
-
-      <!-- DASHBOARD -->
-      <section id="dashboardSection" class="hidden space-y-8">
-        <!-- Linha superior: QR + aniversários -->
-        <div class="grid md:grid-cols-2 gap-6 mt-4">
-          <!-- Card QR Code -->
-          <div class="bg-white rounded-2xl shadow p-5">
-            <h2 class="text-lg font-semibold text-slate-700 mb-2">
-              Formulário de cadastro de famílias
-            </h2>
-            <p class="text-xs text-slate-500 mb-3">
-              Use o QR Code ou o link abaixo para divulgar o formulário de cadastro.
-            </p>
-            <div class="flex flex-col md:flex-row md:items-center gap-4">
-              <div class="flex flex-col items-center gap-2">
-                <canvas id="qrCanvas" class="border border-slate-200 rounded-xl bg-white"></canvas>
-                <button
-                  id="downloadQrButton"
-                  class="mt-1 inline-flex items-center justify-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200"
-                >
-                  Baixar QR Code
-                </button>
-              </div>
-              <div class="flex-1">
-                <p class="text-xs font-medium text-slate-600 mb-1">
-                  Link do formulário
-                </p>
-                <div class="flex items-center gap-2">
-                  <input
-                    id="formUrlInput"
-                    type="text"
-                    readonly
-                    class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700"
-                  />
-                  <button
-                    id="copyLinkButton"
-                    class="shrink-0 inline-flex items-center justify-center rounded-lg bg-sky-600 px-3 py-2 text-xs font-medium text-white hover:bg-sky-700"
-                  >
-                    Copiar
-                  </button>
+        <!-- Título -->
+        <header class="mb-6">
+            <div class="flex items-center gap-3 mb-2">
+                <img src="logo-ibvp.png" alt="Igreja Batista de Vargem Pequena" class="h-10 w-auto" />
+                <div>
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                        Igreja Batista de Vargem Pequena
+                    </p>
+                    <h1 class="text-2xl font-bold text-slate-800">
+                        Ministério de Famílias
+                    </h1>
                 </div>
-                <p id="copyFeedback" class="text-xs text-emerald-600 mt-1 hidden">
-                  Link copiado para a área de transferência!
-                </p>
-              </div>
             </div>
-          </div>
-
-          <!-- Card aniversários de nascimento -->
-          <div class="bg-white rounded-2xl shadow p-5">
-            <h2 class="text-lg font-semibold text-slate-700 mb-2">
-              Aniversários de nascimento – <span id="birthMonthLabel"></span>
-            </h2>
-            <p class="text-xs text-slate-500 mb-3">
-              Membros das famílias que fazem aniversário neste mês.
+            <p class="text-sm text-slate-500">
+                Painel interno para acompanhamento das famílias cadastradas
             </p>
-            <ul
-              id="birthdaysList"
-              class="space-y-1 max-h-64 overflow-auto text-sm text-slate-700"
-            >
-              <li class="text-xs text-slate-400">
-                Carregando aniversários...
-              </li>
-            </ul>
-          </div>
-        </div>
+        </header>
 
-        <!-- Card aniversários de casamento -->
-        <div class="bg-white rounded-2xl shadow p-5">
-          <h2 class="text-lg font-semibold text-slate-700 mb-2">
-            Aniversários de casamento – <span id="weddingMonthLabel"></span>
-          </h2>
-          <p class="text-xs text-slate-500 mb-3">
-            Casais que comemoram aniversário de casamento neste mês.
-          </p>
-          <ul
-            id="weddingsList"
-            class="space-y-1 max-h-64 overflow-auto text-sm text-slate-700"
-          >
-            <li class="text-xs text-slate-400">
-              Carregando aniversários de casamento...
-            </li>
-          </ul>
-        </div>
 
-        <!-- Lista de famílias -->
-        <div class="bg-white rounded-2xl shadow p-5">
-          <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-            <div class="flex-1">
-              <label
-                for="searchInput"
-                class="block text-sm font-medium text-slate-600 mb-1"
-              >
-                Buscar família
-              </label>
-              <input
-                id="searchInput"
-                type="text"
-                placeholder="Buscar por nome da família, do homem, da mulher ou dos filhos..."
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
+        <!-- LOGIN -->
+        <section id="loginSection" class="max-w-sm bg-white rounded-2xl shadow p-6">
+            <h2 class="text-lg font-semibold text-slate-700 mb-4">Acesso ao painel</h2>
+            <label class="block text-sm font-medium text-slate-600 mb-1" for="adminPassword">
+                Senha
+            </label>
+            <input id="adminPassword" type="password"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+            <p id="loginError" class="text-xs text-red-600 mt-2 hidden">
+                Senha incorreta. Tente novamente.
+            </p>
+            <button id="loginButton"
+                class="mt-4 inline-flex items-center justify-center rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+                Entrar
+            </button>
+        </section>
+
+        <!-- DASHBOARD -->
+        <section id="dashboardSection" class="hidden space-y-8">
+            <!-- Linha superior: QR + aniversários -->
+            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                <!-- Card QR Code -->
+                <div class="bg-white rounded-2xl shadow p-5">
+                    <h2 class="text-lg font-semibold text-slate-700 mb-2">
+                        Formulário de cadastro de famílias
+                    </h2>
+                    <p class="text-xs text-slate-500 mb-3">
+                        Use o QR Code ou o link abaixo para divulgar o formulário de cadastro.
+                    </p>
+                    <div class="flex flex-col md:flex-row md:items-center gap-4">
+                        <div class="flex flex-col items-center gap-2">
+                            <canvas id="qrCanvas" class="border border-slate-200 rounded-xl bg-white"></canvas>
+                            <button id="downloadQrButton"
+                                class="mt-1 inline-flex items-center justify-center rounded-lg bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200">
+                                Baixar QR Code
+                            </button>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs font-medium text-slate-600 mb-1">
+                                Link do formulário
+                            </p>
+                            <div class="flex items-center gap-2">
+                                <input id="formUrlInput" type="text" readonly
+                                    class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700" />
+                                <button id="copyLinkButton"
+                                    class="shrink-0 inline-flex items-center justify-center rounded-lg bg-sky-600 px-3 py-2 text-xs font-medium text-white hover:bg-sky-700">
+                                    Copiar
+                                </button>
+                            </div>
+                            <p id="copyFeedback" class="text-xs text-emerald-600 mt-1 hidden">
+                                Link copiado para a área de transferência!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card aniversários de nascimento -->
+                <div class="bg-white rounded-2xl shadow p-5">
+                    <h2 class="text-lg font-semibold text-slate-700 mb-2">
+                        Aniversários de nascimento – <span id="birthMonthLabel"></span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mb-3">
+                        Membros das famílias que fazem aniversário neste mês.
+                    </p>
+                    <ul id="birthdaysList" class="space-y-1 max-h-64 overflow-auto text-sm text-slate-700">
+                        <li class="text-xs text-slate-400">
+                            Carregando aniversários...
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="flex flex-wrap gap-3">
-              <label class="inline-flex items-center gap-1 text-xs text-slate-700">
-                <input
-                  id="filterHasMembers"
-                  type="checkbox"
-                  class="rounded border-slate-300"
-                />
-                <span>Somente famílias com membros da IBVP</span>
-              </label>
-              <label class="inline-flex items-center gap-1 text-xs text-slate-700">
-                <input
-                  id="filterHasChildren"
-                  type="checkbox"
-                  class="rounded border-slate-300"
-                />
-                <span>Somente famílias com filhos</span>
-              </label>
-            </div>
-            <div class="flex items-center">
-              <button
-                id="exportExcelButton"
-                class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700"
-              >
-                Baixar lista em Excel
-              </button>
-            </div>
-          </div>
 
-          <div class="border border-slate-200 rounded-xl overflow-hidden">
-            <table class="min-w-full text-sm">
-              <thead class="bg-slate-50">
-                <tr>
-                  <th class="px-3 py-2 text-left text-xs font-semibold text-slate-600">
-                    Família
-                  </th>
-                  <th class="px-3 py-2 text-left text-xs font-semibold text-slate-600">
-                    Telefone(s)
-                  </th>
-                  <th class="px-3 py-2 text-left text-xs font-semibold text-slate-600">
-                    Situação na igreja
-                  </th>
-                </tr>
-              </thead>
-              <tbody id="familiesTableBody" class="divide-y divide-slate-100">
-                <tr>
-                  <td colspan="3" class="px-3 py-3 text-xs text-slate-400">
-                    Carregando famílias...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <!-- Card aniversários de casamento -->
+            <div class="bg-white rounded-2xl shadow p-5">
+                <h2 class="text-lg font-semibold text-slate-700 mb-2">
+                    Aniversários de casamento – <span id="weddingMonthLabel"></span>
+                </h2>
+                <p class="text-xs text-slate-500 mb-3">
+                    Casais que comemoram aniversário de casamento neste mês.
+                </p>
+                <ul id="weddingsList" class="space-y-1 max-h-64 overflow-auto text-sm text-slate-700">
+                    <li class="text-xs text-slate-400">
+                        Carregando aniversários de casamento...
+                    </li>
+                </ul>
+            </div>
 
-          <p id="familiesCount" class="mt-2 text-xs text-slate-500">
-            <!-- Preenchido via JS -->
-          </p>
-        </div>
-      </section>
+            <!-- Lista de famílias -->
+            <div class="bg-white rounded-2xl shadow p-5">
+                <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+                    <div class="flex-1">
+                        <label for="searchInput" class="block text-sm font-medium text-slate-600 mb-1">
+                            Buscar família
+                        </label>
+                        <input id="searchInput" type="text"
+                            placeholder="Buscar por nome da família, do homem, da mulher ou dos filhos..."
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="inline-flex items-center gap-1 text-xs text-slate-700">
+                            <input id="filterHasMembers" type="checkbox" class="rounded border-slate-300" />
+                            <span>Somente famílias com membros da IBVP</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1 text-xs text-slate-700">
+                            <input id="filterHasChildren" type="checkbox" class="rounded border-slate-300" />
+                            <span>Somente famílias com filhos</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <button id="exportExcelButton"
+                            class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700">
+                            Baixar lista em Excel
+                        </button>
+                    </div>
+                </div>
+
+                <div class="border border-slate-200 rounded-xl overflow-hidden">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-3 py-2 text-left text-xs font-semibold text-slate-600">
+                                    Família
+                                </th>
+                                <th class="px-3 py-2 text-left text-xs font-semibold text-slate-600">
+                                    Telefone(s)
+                                </th>
+                                <th class="px-3 py-2 text-left text-xs font-semibold text-slate-600">
+                                    Situação na igreja
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="familiesTableBody" class="divide-y divide-slate-100">
+                            <tr>
+                                <td colspan="3" class="px-3 py-3 text-xs text-slate-400">
+                                    Carregando famílias...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="familiesCount" class="mt-2 text-xs text-slate-500">
+                    <!-- Preenchido via JS -->
+                </p>
+            </div>
+        </section>
     </div>
 
     <!-- PAINEL LATERAL DE DETALHES DA FAMÍLIA -->
-    <div
-      id="familyDetailsOverlay"
-      class="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 hidden"
-    >
-      <div
-        class="absolute inset-y-0 right-0 w-full max-w-md bg-white shadow-xl flex flex-col"
-      >
-        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200">
-          <h2 class="text-sm font-semibold text-slate-700">
-            Detalhes da família
-          </h2>
-          <button
-            id="closeDetailsButton"
-            class="text-slate-500 hover:text-slate-800 text-xl leading-none"
-            aria-label="Fechar painel de detalhes"
-          >
-            ×
-          </button>
+    <div id="familyDetailsOverlay" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 hidden">
+        <div class="absolute inset-y-0 right-0 w-full max-w-md bg-white shadow-xl flex flex-col">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                <h2 class="text-sm font-semibold text-slate-700">
+                    Detalhes da família
+                </h2>
+                <button id="closeDetailsButton" class="text-slate-500 hover:text-slate-800 text-xl leading-none"
+                    aria-label="Fechar painel de detalhes">
+                    ×
+                </button>
+            </div>
+            <div id="familyDetailsContent" class="flex-1 overflow-auto px-4 py-4 text-sm text-slate-800 space-y-4">
+                <!-- Preenchido via JS -->
+            </div>
         </div>
-        <div
-          id="familyDetailsContent"
-          class="flex-1 overflow-auto px-4 py-4 text-sm text-slate-800 space-y-4"
-        >
-          <!-- Preenchido via JS -->
-        </div>
-      </div>
     </div>
 
     <script>
-      // ======= CONFIGURAÇÕES =======
-      // 1) preencha com a URL do projeto Supabase (sem barra no final)
-      const SUPABASE_URL = "https://bdtqnqaqgbtxchoynpug.supabase.co";
-      // 2) preencha com a chave pública (anon / publishable) do Supabase
-      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdHFucWFxZ2J0eGNob3lucHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTkwNzIsImV4cCI6MjA4NDc3NTA3Mn0.o6TN8wwvUdtyB7dENSGqnrezfndLFZjmNsFja2LgfEM";
+        // ======= CONFIGURAÇÕES =======
+        // 1) preencha com a URL do projeto Supabase (sem barra no final)
+        const SUPABASE_URL = "https://bdtqnqaqgbtxchoynpug.supabase.co";
+        // 2) preencha com a chave pública (anon / publishable) do Supabase
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdHFucWFxZ2J0eGNob3lucHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTkwNzIsImV4cCI6MjA4NDc3NTA3Mn0.o6TN8wwvUdtyB7dENSGqnrezfndLFZjmNsFja2LgfEM";
 
-      // 3) URL pública do formulário (index.html)
-      const FORM_URL = "https://ibvp-ministerio-familias.netlify.app/";
+        // 3) URL pública do formulário (index.html)
+        const FORM_URL = "https://ibvp-ministerio-familias.netlify.app/";
 
-      // 4) senha simples do painel (troque por algo só de vocês)
-      const ADMIN_PASSWORD = "familias2026";
+        // 4) senha simples do painel (troque por algo só de vocês)
+        const ADMIN_PASSWORD = "familias2026";
 
-      // ======= ESTADO EM MEMÓRIA =======
-      let couples = [];
-      let filteredCouples = [];
-      let searchTerm = "";
-      let filterHasMembers = false;
-      let filterHasChildren = false;
+        // ======= ESTADO EM MEMÓRIA =======
+        let couples = [];
+        let filteredCouples = [];
+        let searchTerm = "";
+        let filterHasMembers = false;
+        let filterHasChildren = false;
 
-      // ======= ELEMENTOS DOM =======
-      const loginSection = document.getElementById("loginSection");
-      const dashboardSection = document.getElementById("dashboardSection");
-      const loginButton = document.getElementById("loginButton");
-      const adminPasswordInput = document.getElementById("adminPassword");
-      const loginError = document.getElementById("loginError");
+        // ======= ELEMENTOS DOM =======
+        const loginSection = document.getElementById("loginSection");
+        const dashboardSection = document.getElementById("dashboardSection");
+        const loginButton = document.getElementById("loginButton");
+        const adminPasswordInput = document.getElementById("adminPassword");
+        const loginError = document.getElementById("loginError");
 
-      const qrCanvas = document.getElementById("qrCanvas");
-      const formUrlInput = document.getElementById("formUrlInput");
-      const copyLinkButton = document.getElementById("copyLinkButton");
-      const copyFeedback = document.getElementById("copyFeedback");
-      const downloadQrButton = document.getElementById("downloadQrButton");
+        const qrCanvas = document.getElementById("qrCanvas");
+        const formUrlInput = document.getElementById("formUrlInput");
+        const copyLinkButton = document.getElementById("copyLinkButton");
+        const copyFeedback = document.getElementById("copyFeedback");
+        const downloadQrButton = document.getElementById("downloadQrButton");
 
-      const birthMonthLabel = document.getElementById("birthMonthLabel");
-      const birthdaysList = document.getElementById("birthdaysList");
-      const weddingMonthLabel = document.getElementById("weddingMonthLabel");
-      const weddingsList = document.getElementById("weddingsList");
+        const birthMonthLabel = document.getElementById("birthMonthLabel");
+        const birthdaysList = document.getElementById("birthdaysList");
+        const weddingMonthLabel = document.getElementById("weddingMonthLabel");
+        const weddingsList = document.getElementById("weddingsList");
 
-      const searchInput = document.getElementById("searchInput");
-      const filterHasMembersCheckbox =
-        document.getElementById("filterHasMembers");
-      const filterHasChildrenCheckbox =
-        document.getElementById("filterHasChildren");
-      const exportExcelButton = document.getElementById("exportExcelButton");
-      const familiesTableBody = document.getElementById("familiesTableBody");
-      const familiesCount = document.getElementById("familiesCount");
+        const searchInput = document.getElementById("searchInput");
+        const filterHasMembersCheckbox =
+            document.getElementById("filterHasMembers");
+        const filterHasChildrenCheckbox =
+            document.getElementById("filterHasChildren");
+        const exportExcelButton = document.getElementById("exportExcelButton");
+        const familiesTableBody = document.getElementById("familiesTableBody");
+        const familiesCount = document.getElementById("familiesCount");
 
-      const familyDetailsOverlay = document.getElementById("familyDetailsOverlay");
-      const closeDetailsButton = document.getElementById("closeDetailsButton");
-      const familyDetailsContent = document.getElementById("familyDetailsContent");
+        const familyDetailsOverlay = document.getElementById("familyDetailsOverlay");
+        const closeDetailsButton = document.getElementById("closeDetailsButton");
+        const familyDetailsContent = document.getElementById("familyDetailsContent");
 
-      // ======= FUNÇÕES AUXILIARES =======
-      function getMonthName(date) {
-        const meses = [
-          "Janeiro",
-          "Fevereiro",
-          "Março",
-          "Abril",
-          "Maio",
-          "Junho",
-          "Julho",
-          "Agosto",
-          "Setembro",
-          "Outubro",
-          "Novembro",
-          "Dezembro",
-        ];
-        return meses[date.getMonth()];
-      }
-
-      function formatDayMonth(date) {
-        const d = String(date.getDate()).padStart(2, "0");
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        return `${d}/${m}`;
-      }
-
-      function formatDateFull(date) {
-        const d = String(date.getDate()).padStart(2, "0");
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        const y = date.getFullYear();
-        return `${d}/${m}/${y}`;
-      }
-
-      function parseDateSafe(value) {
-        if (!value) return null;
-        const parts = String(value).split("-");
-        if (parts.length < 3) return null;
-        const year = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10);
-        const day = parseInt(parts[2], 10);
-        if (!year || !month || !day) return null;
-        return new Date(year, month - 1, day);
-      }
-
-      function calculateAge(birthDate, referenceDate) {
-        let age = referenceDate.getFullYear() - birthDate.getFullYear();
-        const m = referenceDate.getMonth() - birthDate.getMonth();
-        const d = referenceDate.getDate() - birthDate.getDate();
-        if (m < 0 || (m === 0 && d < 0)) {
-          age--;
+        // ======= FUNÇÕES AUXILIARES =======
+        function getMonthName(date) {
+            const meses = [
+                "Janeiro",
+                "Fevereiro",
+                "Março",
+                "Abril",
+                "Maio",
+                "Junho",
+                "Julho",
+                "Agosto",
+                "Setembro",
+                "Outubro",
+                "Novembro",
+                "Dezembro",
+            ];
+            return meses[date.getMonth()];
         }
-        return age;
-      }
 
-      function buildSituationText(row) {
-        const m1 = !!row.is_member_person_1;
-        const m2 = !!row.is_member_person_2;
-        if (m1 && m2) return "Ambos membros da IBVP";
-        if (m1 || m2) return "Apenas 1 membro da IBVP";
-        return "Nenhum membro da IBVP";
-      }
-
-      function buildIndividualMembershipText(isMemberIbvp, otherChurch) {
-        if (isMemberIbvp) return "Membro da IBVP";
-        if (otherChurch) return `Membro de outra igreja (${otherChurch})`;
-        return "Não é membro de nenhuma igreja";
-      }
-
-      // ======= LOGIN =======
-      loginButton.addEventListener("click", () => {
-        const pwd = adminPasswordInput.value;
-        if (pwd === ADMIN_PASSWORD) {
-          loginError.classList.add("hidden");
-          loginSection.classList.add("hidden");
-          dashboardSection.classList.remove("hidden");
-          initDashboard();
-        } else {
-          loginError.classList.remove("hidden");
+        function formatDayMonth(date) {
+            const d = String(date.getDate()).padStart(2, "0");
+            const m = String(date.getMonth() + 1).padStart(2, "0");
+            return `${d}/${m}`;
         }
-      });
 
-      adminPasswordInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          loginButton.click();
+        function formatDateFull(date) {
+            const d = String(date.getDate()).padStart(2, "0");
+            const m = String(date.getMonth() + 1).padStart(2, "0");
+            const y = date.getFullYear();
+            return `${d}/${m}/${y}`;
         }
-      });
 
-      // ======= INICIALIZAÇÃO DO PAINEL =======
-      async function initDashboard() {
-        formUrlInput.value = FORM_URL;
+        function parseDateSafe(value) {
+            if (!value) return null;
+            const parts = String(value).split("-");
+            if (parts.length < 3) return null;
+            const year = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10);
+            const day = parseInt(parts[2], 10);
+            if (!year || !month || !day) return null;
+            return new Date(year, month - 1, day);
+        }
 
-        QRCode.toCanvas(
-          qrCanvas,
-          FORM_URL,
-          {
-            width: 220,
-          },
-          (error) => {
-            if (error) {
-              console.error(error);
+        function calculateAge(birthDate, referenceDate) {
+            let age = referenceDate.getFullYear() - birthDate.getFullYear();
+            const m = referenceDate.getMonth() - birthDate.getMonth();
+            const d = referenceDate.getDate() - birthDate.getDate();
+            if (m < 0 || (m === 0 && d < 0)) {
+                age--;
             }
-          }
-        );
+            return age;
+        }
 
-        const hoje = new Date();
-        const mesAno = `${getMonthName(hoje)} ${hoje.getFullYear()}`;
-        birthMonthLabel.textContent = mesAno;
-        weddingMonthLabel.textContent = mesAno;
+        function buildSituationText(row) {
+            const m1 = !!row.is_member_person_1;
+            const m2 = !!row.is_member_person_2;
+            if (m1 && m2) return "Ambos membros da IBVP";
+            if (m1 || m2) return "Apenas 1 membro da IBVP";
+            return "Nenhum membro da IBVP";
+        }
 
-        await loadCouplesFromSupabase();
-        setupUiEvents();
-        applyFiltersAndRender();
-      }
+        function buildIndividualMembershipText(isMemberIbvp, otherChurch) {
+            if (isMemberIbvp) return "Membro da IBVP";
+            if (otherChurch) return `Membro de outra igreja (${otherChurch})`;
+            return "Não é membro de nenhuma igreja";
+        }
 
-      // ======= BUSCA NO SUPABASE =======
-      async function loadCouplesFromSupabase() {
-        try {
-          const resp = await fetch(
-            `${SUPABASE_URL}/rest/v1/couples?select=*`,
-            {
-              headers: {
-                apikey: SUPABASE_ANON_KEY,
-                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-              },
+        // ======= LOGIN =======
+        loginButton.addEventListener("click", () => {
+            const pwd = adminPasswordInput.value;
+            if (pwd === ADMIN_PASSWORD) {
+                loginError.classList.add("hidden");
+                loginSection.classList.add("hidden");
+                dashboardSection.classList.remove("hidden");
+                initDashboard();
+            } else {
+                loginError.classList.remove("hidden");
             }
-          );
-
-          if (!resp.ok) {
-            console.error("Erro ao buscar couples", await resp.text());
-            alert("Erro ao carregar famílias do Supabase.");
-            return;
-          }
-
-          const data = await resp.json();
-          couples = Array.isArray(data) ? data : [];
-        } catch (err) {
-          console.error(err);
-          alert("Erro de conexão ao carregar famílias.");
-        }
-      }
-
-      // ======= EVENTOS DE UI =======
-      function setupUiEvents() {
-        copyLinkButton.addEventListener("click", async () => {
-          try {
-            await navigator.clipboard.writeText(FORM_URL);
-            copyFeedback.classList.remove("hidden");
-            setTimeout(() => copyFeedback.classList.add("hidden"), 2000);
-          } catch (err) {
-            console.error("Erro ao copiar link:", err);
-          }
         });
 
-        downloadQrButton.addEventListener("click", () => {
-          try {
-            const link = document.createElement("a");
-            link.href = qrCanvas
-              .toDataURL("image/png")
-              .replace("image/png", "image/octet-stream");
-            link.download = "qr-cadastro-familias.png";
-            link.click();
-          } catch (err) {
-            console.error("Erro ao baixar QR:", err);
-          }
+        adminPasswordInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                loginButton.click();
+            }
         });
 
-        searchInput.addEventListener("input", () => {
-          searchTerm = searchInput.value.toLowerCase();
-          applyFiltersAndRender();
-        });
+        // ======= INICIALIZAÇÃO DO PAINEL =======
+        async function initDashboard() {
+            formUrlInput.value = FORM_URL;
 
-        filterHasMembersCheckbox.addEventListener("change", () => {
-          filterHasMembers = filterHasMembersCheckbox.checked;
-          applyFiltersAndRender();
-        });
+            QRCode.toCanvas(
+                qrCanvas,
+                FORM_URL,
+                {
+                    width: 220,
+                },
+                (error) => {
+                    if (error) {
+                        console.error(error);
+                    }
+                }
+            );
 
-        filterHasChildrenCheckbox.addEventListener("change", () => {
-          filterHasChildren = filterHasChildrenCheckbox.checked;
-          applyFiltersAndRender();
-        });
+            const hoje = new Date();
+            const mesAno = `${getMonthName(hoje)} ${hoje.getFullYear()}`;
+            birthMonthLabel.textContent = mesAno;
+            weddingMonthLabel.textContent = mesAno;
 
-        exportExcelButton.addEventListener("click", () => {
-          exportFamiliesToExcel();
-        });
-
-        closeDetailsButton.addEventListener("click", () => {
-          closeFamilyDetails();
-        });
-
-        familyDetailsOverlay.addEventListener("click", (e) => {
-          if (e.target === familyDetailsOverlay) {
-            closeFamilyDetails();
-          }
-        });
-
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape") {
-            closeFamilyDetails();
-          }
-        });
-      }
-
-      // ======= FILTROS E RENDER =======
-      function applyFiltersAndRender() {
-        filteredCouples = couples.filter((row) =>
-          passesFilters(row, searchTerm, filterHasMembers, filterHasChildren)
-        );
-
-        renderFamiliesTable(filteredCouples);
-        renderBirthdays(filteredCouples);
-        renderWeddings(filteredCouples);
-      }
-
-      function passesFilters(row, search, hasMembers, hasChildren) {
-        if (hasMembers) {
-          const m1 = !!row.is_member_person_1;
-          const m2 = !!row.is_member_person_2;
-          if (!m1 && !m2) return false;
+            await loadCouplesFromSupabase();
+            setupUiEvents();
+            applyFiltersAndRender();
         }
 
-        if (hasChildren) {
-          if (!Array.isArray(row.children) || row.children.length === 0)
-            return false;
+        // ======= BUSCA NO SUPABASE =======
+        async function loadCouplesFromSupabase() {
+            try {
+                const resp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/couples?select=*`,
+                    {
+                        headers: {
+                            apikey: SUPABASE_ANON_KEY,
+                            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                        },
+                    }
+                );
+
+                if (!resp.ok) {
+                    console.error("Erro ao buscar couples", await resp.text());
+                    alert("Erro ao carregar famílias do Supabase.");
+                    return;
+                }
+
+                const data = await resp.json();
+                couples = Array.isArray(data) ? data : [];
+            } catch (err) {
+                console.error(err);
+                alert("Erro de conexão ao carregar famílias.");
+            }
         }
 
-        if (search && search.trim() !== "") {
-          const s = search.trim().toLowerCase();
-          const coupleName = (row.name_couple || "").toLowerCase();
-          const p1 = (row.name_person_1 || "").toLowerCase();
-          const p2 = (row.name_person_2 || "").toLowerCase();
-          let childrenNames = "";
-          if (Array.isArray(row.children)) {
-            childrenNames = row.children
-              .map((c) => (c.name || "").toLowerCase())
-              .join(" ");
-          }
+        // ======= EVENTOS DE UI =======
+        function setupUiEvents() {
+            copyLinkButton.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(FORM_URL);
+                    copyFeedback.classList.remove("hidden");
+                    setTimeout(() => copyFeedback.classList.add("hidden"), 2000);
+                } catch (err) {
+                    console.error("Erro ao copiar link:", err);
+                }
+            });
 
-          if (
-            !(
-              coupleName.includes(s) ||
-              p1.includes(s) ||
-              p2.includes(s) ||
-              childrenNames.includes(s)
-            )
-          ) {
-            return false;
-          }
+            downloadQrButton.addEventListener("click", () => {
+                try {
+                    const link = document.createElement("a");
+                    link.href = qrCanvas
+                        .toDataURL("image/png")
+                        .replace("image/png", "image/octet-stream");
+                    link.download = "qr-cadastro-familias.png";
+                    link.click();
+                } catch (err) {
+                    console.error("Erro ao baixar QR:", err);
+                }
+            });
+
+            searchInput.addEventListener("input", () => {
+                searchTerm = searchInput.value.toLowerCase();
+                applyFiltersAndRender();
+            });
+
+            filterHasMembersCheckbox.addEventListener("change", () => {
+                filterHasMembers = filterHasMembersCheckbox.checked;
+                applyFiltersAndRender();
+            });
+
+            filterHasChildrenCheckbox.addEventListener("change", () => {
+                filterHasChildren = filterHasChildrenCheckbox.checked;
+                applyFiltersAndRender();
+            });
+
+            exportExcelButton.addEventListener("click", () => {
+                exportFamiliesToExcel();
+            });
+
+            closeDetailsButton.addEventListener("click", () => {
+                closeFamilyDetails();
+            });
+
+            familyDetailsOverlay.addEventListener("click", (e) => {
+                if (e.target === familyDetailsOverlay) {
+                    closeFamilyDetails();
+                }
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    closeFamilyDetails();
+                }
+            });
         }
 
-        return true;
-      }
+        // ======= FILTROS E RENDER =======
+        function applyFiltersAndRender() {
+            filteredCouples = couples.filter((row) =>
+                passesFilters(row, searchTerm, filterHasMembers, filterHasChildren)
+            );
 
-      // ======= RENDERIZAÇÃO: TABELA DE FAMÍLIAS =======
-      function renderFamiliesTable(rows) {
-        familiesTableBody.innerHTML = "";
-        if (!rows.length) {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+            renderFamiliesTable(filteredCouples);
+            renderBirthdays(filteredCouples);
+            renderWeddings(filteredCouples);
+        }
+
+        function passesFilters(row, search, hasMembers, hasChildren) {
+            if (hasMembers) {
+                const m1 = !!row.is_member_person_1;
+                const m2 = !!row.is_member_person_2;
+                if (!m1 && !m2) return false;
+            }
+
+            if (hasChildren) {
+                if (!Array.isArray(row.children) || row.children.length === 0)
+                    return false;
+            }
+
+            if (search && search.trim() !== "") {
+                const s = search.trim().toLowerCase();
+                const coupleName = (row.name_couple || "").toLowerCase();
+                const p1 = (row.name_person_1 || "").toLowerCase();
+                const p2 = (row.name_person_2 || "").toLowerCase();
+                let childrenNames = "";
+                if (Array.isArray(row.children)) {
+                    childrenNames = row.children
+                        .map((c) => (c.name || "").toLowerCase())
+                        .join(" ");
+                }
+
+                if (
+                    !(
+                        coupleName.includes(s) ||
+                        p1.includes(s) ||
+                        p2.includes(s) ||
+                        childrenNames.includes(s)
+                    )
+                ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // ======= RENDERIZAÇÃO: TABELA DE FAMÍLIAS =======
+        function renderFamiliesTable(rows) {
+            familiesTableBody.innerHTML = "";
+            if (!rows.length) {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
             <td colspan="3" class="px-3 py-3 text-xs text-slate-400">
               Nenhuma família encontrada com os filtros/busca atuais.
             </td>
           `;
-          familiesTableBody.appendChild(tr);
-          familiesCount.textContent = "0 famílias listadas.";
-          return;
-        }
+                familiesTableBody.appendChild(tr);
+                familiesCount.textContent = "0 famílias listadas.";
+                return;
+            }
 
-        rows.forEach((row) => {
-          const tr = document.createElement("tr");
-          tr.className = "hover:bg-slate-50 cursor-pointer";
+            rows.forEach((row) => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50 cursor-pointer";
 
-          const childrenText = Array.isArray(row.children)
-            ? row.children.map((c) => c.name).filter(Boolean).join(", ")
-            : "";
-          const childrenLine = childrenText
-            ? `<div class="text-xs text-slate-500">Filhos: ${childrenText}</div>`
-            : `<div class="text-xs text-slate-400">Sem filhos informados</div>`;
+                const childrenText = Array.isArray(row.children)
+                    ? row.children.map((c) => c.name).filter(Boolean).join(", ")
+                    : "";
+                const childrenLine = childrenText
+                    ? `<div class="text-xs text-slate-500">Filhos: ${childrenText}</div>`
+                    : `<div class="text-xs text-slate-400">Sem filhos informados</div>`;
 
-          const phones = [];
-          if (row.phone_person_1) phones.push(`H: ${row.phone_person_1}`);
-          if (row.phone_person_2) phones.push(`M: ${row.phone_person_2}`);
-          const phonesHtml =
-            phones.length > 0
-              ? phones.join("<br>")
-              : '<span class="text-xs text-slate-400">Não informado</span>';
+                const phones = [];
+                if (row.phone_person_1) phones.push(`H: ${row.phone_person_1}`);
+                if (row.phone_person_2) phones.push(`M: ${row.phone_person_2}`);
+                const phonesHtml =
+                    phones.length > 0
+                        ? phones.join("<br>")
+                        : '<span class="text-xs text-slate-400">Não informado</span>';
 
-          const situationText = buildSituationText(row);
+                const situationText = buildSituationText(row);
 
-          tr.innerHTML = `
+                tr.innerHTML = `
             <td class="px-3 py-2 align-top">
               <div class="font-medium text-slate-800">
                 ${row.name_couple || "Família sem nome definido"}
@@ -591,81 +556,81 @@
             </td>
           `;
 
-          tr.addEventListener("click", () => {
-            openFamilyDetails(row);
-          });
+                tr.addEventListener("click", () => {
+                    openFamilyDetails(row);
+                });
 
-          familiesTableBody.appendChild(tr);
-        });
+                familiesTableBody.appendChild(tr);
+            });
 
-        familiesCount.textContent = `${rows.length} família(s) listada(s).`;
-      }
-
-      // ======= PAINEL LATERAL: DETALHES DA FAMÍLIA =======
-      function openFamilyDetails(row) {
-        const hoje = new Date();
-
-        const birth1 = parseDateSafe(row.birth_person_1);
-        const birth2 = parseDateSafe(row.birth_person_2);
-        const wedding = parseDateSafe(row.wedding_date);
-
-        let birth1Text = "Não informado";
-        if (birth1) {
-          const age1 = calculateAge(birth1, hoje);
-          birth1Text = `${formatDateFull(birth1)} (${age1} anos)`;
+            familiesCount.textContent = `${rows.length} família(s) listada(s).`;
         }
 
-        let birth2Text = "Não informado";
-        if (birth2) {
-          const age2 = calculateAge(birth2, hoje);
-          birth2Text = `${formatDateFull(birth2)} (${age2} anos)`;
-        }
+        // ======= PAINEL LATERAL: DETALHES DA FAMÍLIA =======
+        function openFamilyDetails(row) {
+            const hoje = new Date();
 
-        let weddingText = "Não informado";
-        if (wedding) {
-          const years = calculateAge(wedding, hoje);
-          weddingText = `${formatDateFull(wedding)} (${years} anos de casados)`;
-        }
+            const birth1 = parseDateSafe(row.birth_person_1);
+            const birth2 = parseDateSafe(row.birth_person_2);
+            const wedding = parseDateSafe(row.wedding_date);
 
-        const membershipPerson1 = buildIndividualMembershipText(
-          !!row.is_member_person_1,
-          row.other_church_person_1
-        );
-        const membershipPerson2 = buildIndividualMembershipText(
-          !!row.is_member_person_2,
-          row.other_church_person_2
-        );
+            let birth1Text = "Não informado";
+            if (birth1) {
+                const age1 = calculateAge(birth1, hoje);
+                birth1Text = `${formatDateFull(birth1)} (${age1} anos)`;
+            }
 
-        const childrenHtml = (Array.isArray(row.children) && row.children.length > 0)
-          ? row.children
-              .map((child) => {
-                if (!child) return "";
-                const name = child.name || "Filho(a) sem nome";
-                const cb = parseDateSafe(child.birth);
-                if (!cb) {
-                  return `<li>${name}</li>`;
-                }
-                const age = calculateAge(cb, hoje);
-                return `<li>${name} – nasceu em ${formatDateFull(cb)} (${age} anos)</li>`;
-              })
-              .join("")
-          : '<li class="text-xs text-slate-400">Nenhum filho informado.</li>';
+            let birth2Text = "Não informado";
+            if (birth2) {
+                const age2 = calculateAge(birth2, hoje);
+                birth2Text = `${formatDateFull(birth2)} (${age2} anos)`;
+            }
 
-        const notesText = row.notes
-          ? row.notes
-          : "Nenhuma observação enviada pela família.";
+            let weddingText = "Não informado";
+            if (wedding) {
+                const years = calculateAge(wedding, hoje);
+                weddingText = `${formatDateFull(wedding)} (${years} anos de casados)`;
+            }
 
-        const membershipTimeText = row.membership_time
-          ? row.membership_time
-          : "Não informado.";
+            const membershipPerson1 = buildIndividualMembershipText(
+                !!row.is_member_person_1,
+                row.other_church_person_1
+            );
+            const membershipPerson2 = buildIndividualMembershipText(
+                !!row.is_member_person_2,
+                row.other_church_person_2
+            );
 
-        const phone1 = row.phone_person_1 || "Não informado";
-        const phone2 = row.phone_person_2 || "Não informado";
-        const email1 = row.email_person_1 || "Não informado";
-        const email2 = row.email_person_2 || "Não informado";
-        const address = row.address || "Não informado";
+            const childrenHtml = (Array.isArray(row.children) && row.children.length > 0)
+                ? row.children
+                    .map((child) => {
+                        if (!child) return "";
+                        const name = child.name || "Filho(a) sem nome";
+                        const cb = parseDateSafe(child.birth);
+                        if (!cb) {
+                            return `<li>${name}</li>`;
+                        }
+                        const age = calculateAge(cb, hoje);
+                        return `<li>${name} – nasceu em ${formatDateFull(cb)} (${age} anos)</li>`;
+                    })
+                    .join("")
+                : '<li class="text-xs text-slate-400">Nenhum filho informado.</li>';
 
-        familyDetailsContent.innerHTML = `
+            const notesText = row.notes
+                ? row.notes
+                : "Nenhuma observação enviada pela família.";
+
+            const membershipTimeText = row.membership_time
+                ? row.membership_time
+                : "Não informado.";
+
+            const phone1 = row.phone_person_1 || "Não informado";
+            const phone2 = row.phone_person_2 || "Não informado";
+            const email1 = row.email_person_1 || "Não informado";
+            const email2 = row.email_person_2 || "Não informado";
+            const address = row.address || "Não informado";
+
+            familyDetailsContent.innerHTML = `
           <section>
             <h3 class="text-base font-semibold text-slate-800 mb-1">
               ${row.name_couple || "Família sem nome definido"}
@@ -731,200 +696,201 @@
           </section>
         `;
 
-        familyDetailsOverlay.classList.remove("hidden");
-      }
-
-      function closeFamilyDetails() {
-        familyDetailsOverlay.classList.add("hidden");
-      }
-
-      // ======= RENDERIZAÇÃO: ANIVERSÁRIOS DE NASCIMENTO =======
-      function renderBirthdays(rows) {
-        birthdaysList.innerHTML = "";
-        const hoje = new Date();
-        const currentMonth = hoje.getMonth();
-        const currentDay = hoje.getDate();
-        const currentYear = hoje.getFullYear();
-
-        const people = [];
-
-        rows.forEach((row) => {
-          const b1 = parseDateSafe(row.birth_person_1);
-          if (b1 && b1.getMonth() === currentMonth) {
-            people.push({
-              name: row.name_person_1 || "Homem",
-              birthDate: b1,
-              coupleName: row.name_couple || "",
-              relation: "",
-            });
-          }
-          const b2 = parseDateSafe(row.birth_person_2);
-          if (b2 && b2.getMonth() === currentMonth) {
-            people.push({
-              name: row.name_person_2 || "Mulher",
-              birthDate: b2,
-              coupleName: row.name_couple || "",
-              relation: "",
-            });
-          }
-          if (Array.isArray(row.children)) {
-            row.children.forEach((child) => {
-              const cb = parseDateSafe(child.birth);
-              if (cb && cb.getMonth() === currentMonth) {
-                people.push({
-                  name: child.name || "Filho(a)",
-                  birthDate: cb,
-                  coupleName: row.name_couple || "",
-                  relation: "child",
-                });
-              }
-            });
-          }
-        });
-
-        if (!people.length) {
-          const li = document.createElement("li");
-          li.className = "text-xs text-slate-400";
-          li.textContent =
-            "Nenhum aniversário de nascimento cadastrado neste mês.";
-          birthdaysList.appendChild(li);
-          return;
+            familyDetailsOverlay.classList.remove("hidden");
         }
 
-        people.sort((a, b) => a.birthDate.getDate() - b.birthDate.getDate());
+        function closeFamilyDetails() {
+            familyDetailsOverlay.classList.add("hidden");
+        }
 
-        people.forEach((p) => {
-          const li = document.createElement("li");
-          const day = p.birthDate.getDate();
-          const dateLabel = formatDayMonth(p.birthDate);
+        // ======= RENDERIZAÇÃO: ANIVERSÁRIOS DE NASCIMENTO =======
+        function renderBirthdays(rows) {
+            birthdaysList.innerHTML = "";
+            const hoje = new Date();
+            const currentMonth = hoje.getMonth();
+            const currentDay = hoje.getDate();
+            const currentYear = hoje.getFullYear();
 
-          const age = calculateAge(
-            p.birthDate,
-            new Date(currentYear, p.birthDate.getMonth(), day)
-          );
+            const people = [];
 
-          let ageText = "";
-          if (day === currentDay) {
-            ageText = `faz ${age} anos hoje`;
-          } else if (day > currentDay) {
-            ageText = `faz ${age} anos em ${dateLabel}`;
-          } else {
-            ageText = `fez ${age} anos em ${dateLabel}`;
-          }
-
-          const relationText =
-            p.relation === "child"
-              ? `(filho(a) de ${p.coupleName})`
-              : `família ${p.coupleName}`;
-
-          li.textContent = `${dateLabel} – ${p.name} – ${relationText} – ${ageText}`;
-          birthdaysList.appendChild(li);
-        });
-      }
-
-      // ======= RENDERIZAÇÃO: ANIVERSÁRIOS DE CASAMENTO =======
-      function renderWeddings(rows) {
-        weddingsList.innerHTML = "";
-        const hoje = new Date();
-        const currentMonth = hoje.getMonth();
-        const currentDay = hoje.getDate();
-        const currentYear = hoje.getFullYear();
-
-        const weddings = [];
-
-        rows.forEach((row) => {
-          const wd = parseDateSafe(row.wedding_date);
-          if (wd && wd.getMonth() === currentMonth) {
-            weddings.push({
-              coupleName: row.name_couple || "Casal sem nome",
-              weddingDate: wd,
+            rows.forEach((row) => {
+                const b1 = parseDateSafe(row.birth_person_1);
+                if (b1 && b1.getMonth() === currentMonth) {
+                    people.push({
+                        name: row.name_person_1 || "Homem",
+                        birthDate: b1,
+                        coupleName: row.name_couple || "",
+                        relation: "",
+                    });
+                }
+                const b2 = parseDateSafe(row.birth_person_2);
+                if (b2 && b2.getMonth() === currentMonth) {
+                    people.push({
+                        name: row.name_person_2 || "Mulher",
+                        birthDate: b2,
+                        coupleName: row.name_couple || "",
+                        relation: "",
+                    });
+                }
+                if (Array.isArray(row.children)) {
+                    row.children.forEach((child) => {
+                        const cb = parseDateSafe(child.birth);
+                        if (cb && cb.getMonth() === currentMonth) {
+                            people.push({
+                                name: child.name || "Filho(a)",
+                                birthDate: cb,
+                                coupleName: row.name_couple || "",
+                                relation: "child",
+                            });
+                        }
+                    });
+                }
             });
-          }
-        });
 
-        if (!weddings.length) {
-          const li = document.createElement("li");
-          li.className = "text-xs text-slate-400";
-          li.textContent =
-            "Nenhum aniversário de casamento cadastrado neste mês.";
-          weddingsList.appendChild(li);
-          return;
+            if (!people.length) {
+                const li = document.createElement("li");
+                li.className = "text-xs text-slate-400";
+                li.textContent =
+                    "Nenhum aniversário de nascimento cadastrado neste mês.";
+                birthdaysList.appendChild(li);
+                return;
+            }
+
+            people.sort((a, b) => a.birthDate.getDate() - b.birthDate.getDate());
+
+            people.forEach((p) => {
+                const li = document.createElement("li");
+                const day = p.birthDate.getDate();
+                const dateLabel = formatDayMonth(p.birthDate);
+
+                const age = calculateAge(
+                    p.birthDate,
+                    new Date(currentYear, p.birthDate.getMonth(), day)
+                );
+
+                let ageText = "";
+                if (day === currentDay) {
+                    ageText = `faz ${age} anos hoje`;
+                } else if (day > currentDay) {
+                    ageText = `faz ${age} anos em ${dateLabel}`;
+                } else {
+                    ageText = `fez ${age} anos em ${dateLabel}`;
+                }
+
+                const relationText =
+                    p.relation === "child"
+                        ? `(filho(a) de ${p.coupleName})`
+                        : `família ${p.coupleName}`;
+
+                li.textContent = `${dateLabel} – ${p.name} – ${relationText} – ${ageText}`;
+                birthdaysList.appendChild(li);
+            });
         }
 
-        weddings.sort(
-          (a, b) => a.weddingDate.getDate() - b.weddingDate.getDate()
-        );
+        // ======= RENDERIZAÇÃO: ANIVERSÁRIOS DE CASAMENTO =======
+        function renderWeddings(rows) {
+            weddingsList.innerHTML = "";
+            const hoje = new Date();
+            const currentMonth = hoje.getMonth();
+            const currentDay = hoje.getDate();
+            const currentYear = hoje.getFullYear();
 
-        weddings.forEach((w) => {
-          const day = w.weddingDate.getDate();
-          const dateLabel = formatDayMonth(w.weddingDate);
-          const yearsMarried = calculateAge(
-            w.weddingDate,
-            new Date(currentYear, w.weddingDate.getMonth(), day)
-          );
+            const weddings = [];
 
-          let textYears = "";
-          if (day === currentDay) {
-            textYears = `completa ${yearsMarried} anos de casados hoje`;
-          } else if (day > currentDay) {
-            textYears = `completa ${yearsMarried} anos de casados em ${dateLabel}`;
-          } else {
-            textYears = `completou ${yearsMarried} anos de casados em ${dateLabel}`;
-          }
+            rows.forEach((row) => {
+                const wd = parseDateSafe(row.wedding_date);
+                if (wd && wd.getMonth() === currentMonth) {
+                    weddings.push({
+                        coupleName: row.name_couple || "Casal sem nome",
+                        weddingDate: wd,
+                    });
+                }
+            });
 
-          const li = document.createElement("li");
-          li.textContent = `${dateLabel} – ${w.coupleName} – ${textYears}`;
-          weddingsList.appendChild(li);
-        });
-      }
+            if (!weddings.length) {
+                const li = document.createElement("li");
+                li.className = "text-xs text-slate-400";
+                li.textContent =
+                    "Nenhum aniversário de casamento cadastrado neste mês.";
+                weddingsList.appendChild(li);
+                return;
+            }
 
-      // ======= EXPORTAR PARA EXCEL =======
-      function exportFamiliesToExcel() {
-        if (!filteredCouples.length) {
-          alert("Não há famílias para exportar com os filtros atuais.");
-          return;
+            weddings.sort(
+                (a, b) => a.weddingDate.getDate() - b.weddingDate.getDate()
+            );
+
+            weddings.forEach((w) => {
+                const day = w.weddingDate.getDate();
+                const dateLabel = formatDayMonth(w.weddingDate);
+                const yearsMarried = calculateAge(
+                    w.weddingDate,
+                    new Date(currentYear, w.weddingDate.getMonth(), day)
+                );
+
+                let textYears = "";
+                if (day === currentDay) {
+                    textYears = `completa ${yearsMarried} anos de casados hoje`;
+                } else if (day > currentDay) {
+                    textYears = `completa ${yearsMarried} anos de casados em ${dateLabel}`;
+                } else {
+                    textYears = `completou ${yearsMarried} anos de casados em ${dateLabel}`;
+                }
+
+                const li = document.createElement("li");
+                li.textContent = `${dateLabel} – ${w.coupleName} – ${textYears}`;
+                weddingsList.appendChild(li);
+            });
         }
 
-        const dataForExcel = filteredCouples.map((row) => {
-          const childrenText = Array.isArray(row.children)
-            ? row.children
-                .map((c) => {
-                  const name = c.name || "";
-                  const birth = c.birth || "";
-                  return birth ? `${name} (${birth})` : name;
-                })
-                .filter(Boolean)
-                .join("; ")
-            : "";
+        // ======= EXPORTAR PARA EXCEL =======
+        function exportFamiliesToExcel() {
+            if (!filteredCouples.length) {
+                alert("Não há famílias para exportar com os filtros atuais.");
+                return;
+            }
 
-          return {
-            "Família": row.name_couple || "",
-            "Nome do homem": row.name_person_1 || "",
-            "Nome da mulher": row.name_person_2 || "",
-            "Telefone homem": row.phone_person_1 || "",
-            "Telefone mulher": row.phone_person_2 || "",
-            "E-mail homem": row.email_person_1 || "",
-            "E-mail mulher": row.email_person_2 || "",
-            "Endereço": row.address || "",
-            "Situação na igreja (resumo)": buildSituationText(row),
-            "Filhos": childrenText,
-            "Tempo na IBVP (texto)": row.membership_time || "",
-            "Observações (mensagem da família)": row.notes || "",
-          };
-        });
+            const dataForExcel = filteredCouples.map((row) => {
+                const childrenText = Array.isArray(row.children)
+                    ? row.children
+                        .map((c) => {
+                            const name = c.name || "";
+                            const birth = c.birth || "";
+                            return birth ? `${name} (${birth})` : name;
+                        })
+                        .filter(Boolean)
+                        .join("; ")
+                    : "";
 
-        const ws = XLSX.utils.json_to_sheet(dataForExcel);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Famílias");
+                return {
+                    "Família": row.name_couple || "",
+                    "Nome do homem": row.name_person_1 || "",
+                    "Nome da mulher": row.name_person_2 || "",
+                    "Telefone homem": row.phone_person_1 || "",
+                    "Telefone mulher": row.phone_person_2 || "",
+                    "E-mail homem": row.email_person_1 || "",
+                    "E-mail mulher": row.email_person_2 || "",
+                    "Endereço": row.address || "",
+                    "Situação na igreja (resumo)": buildSituationText(row),
+                    "Filhos": childrenText,
+                    "Tempo na IBVP (texto)": row.membership_time || "",
+                    "Observações (mensagem da família)": row.notes || "",
+                };
+            });
 
-        const hoje = new Date();
-        const y = hoje.getFullYear();
-        const m = String(hoje.getMonth() + 1).padStart(2, "0");
-        const d = String(hoje.getDate()).padStart(2, "0");
-        const filename = `familias_ibvp_${y}-${m}-${d}.xlsx`;
+            const ws = XLSX.utils.json_to_sheet(dataForExcel);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Famílias");
 
-        XLSX.writeFile(wb, filename);
-      }
+            const hoje = new Date();
+            const y = hoje.getFullYear();
+            const m = String(hoje.getMonth() + 1).padStart(2, "0");
+            const d = String(hoje.getDate()).padStart(2, "0");
+            const filename = `familias_ibvp_${y}-${m}-${d}.xlsx`;
+
+            XLSX.writeFile(wb, filename);
+        }
     </script>
-  </body>
+</body>
+
 </html>
