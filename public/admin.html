@@ -75,6 +75,31 @@
 
         <!-- DASHBOARD -->
         <section id="dashboardSection" class="hidden space-y-8">
+            <!-- Seletor de mês para aniversários -->
+            <div class="mt-4">
+                <label class="block text-xs font-medium text-slate-600 mb-1">
+                    Mês para visualizar aniversários
+                </label>
+                <select id="monthFilter"
+                    class="w-full md:w-64 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                    <option value="">Mês atual</option>
+                    <option value="1">Janeiro</option>
+                    <option value="2">Fevereiro</option>
+                    <option value="3">Março</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Maio</option>
+                    <option value="6">Junho</option>
+                    <option value="7">Julho</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+                <p class="text-xs text-slate-500 mt-1">
+                    O mês selecionado vale para os aniversários de nascimento e de casamento.
+                </p>
+            </div>
             <!-- Linha superior: QR + aniversários -->
             <div class="grid md:grid-cols-2 gap-6 mt-4">
                 <!-- Card QR Code -->
@@ -257,6 +282,7 @@
         let filterHasMembers = false;
         let filterHasChildren = false;
         let filterMembershipTime = "";
+        let monthFilter = ""; // "" = mês atual, "1".."12" = mês escolhido
 
         // ======= ELEMENTOS DOM =======
         const loginSection = document.getElementById("loginSection");
@@ -282,6 +308,7 @@
         const filterHasChildrenCheckbox =
             document.getElementById("filterHasChildren");
         const filterMembershipTimeSelect = document.getElementById("filter_membership_time");
+        const monthFilterSelect = document.getElementById("monthFilter");
         const exportExcelButton = document.getElementById("exportExcelButton");
         const familiesTableBody = document.getElementById("familiesTableBody");
         const familiesCount = document.getElementById("familiesCount");
@@ -357,6 +384,25 @@
             return "Não é membro de nenhuma igreja";
         }
 
+        function updateMonthLabels() {
+            const hoje = new Date();
+            const year = hoje.getFullYear();
+
+            let monthIndex;
+            if (!monthFilter) {
+                // Mês atual
+                monthIndex = hoje.getMonth();
+            } else {
+                // monthFilter vem como "1".."12"
+                monthIndex = parseInt(monthFilter, 10) - 1;
+            }
+
+            const refDate = new Date(year, monthIndex, 1);
+            const mesAno = `${getMonthName(refDate)} ${year}`;
+            birthMonthLabel.textContent = mesAno;
+            weddingMonthLabel.textContent = mesAno;
+        }
+
         // ======= LOGIN =======
         loginButton.addEventListener("click", () => {
             const pwd = adminPasswordInput.value;
@@ -393,10 +439,7 @@
                 }
             );
 
-            const hoje = new Date();
-            const mesAno = `${getMonthName(hoje)} ${hoje.getFullYear()}`;
-            birthMonthLabel.textContent = mesAno;
-            weddingMonthLabel.textContent = mesAno;
+            updateMonthLabels();
 
             await loadCouplesFromSupabase();
             setupUiEvents();
@@ -474,6 +517,14 @@
                 filterMembershipTime = filterMembershipTimeSelect.value; // "" ou uma das opções
                 applyFiltersAndRender();
             });
+
+            if (monthFilterSelect) {
+                monthFilterSelect.addEventListener("change", () => {
+                    monthFilter = monthFilterSelect.value; // "" ou "1".."12"
+                    updateMonthLabels();
+                    applyFiltersAndRender();
+                });
+            }
 
             exportExcelButton.addEventListener("click", () => {
                 exportFamiliesToExcel();
@@ -767,15 +818,21 @@
         function renderBirthdays(rows) {
             birthdaysList.innerHTML = "";
             const hoje = new Date();
-            const currentMonth = hoje.getMonth();
-            const currentDay = hoje.getDate();
             const currentYear = hoje.getFullYear();
+
+            // Descobre qual mês usar (0..11)
+            let targetMonthIndex;
+            if (!monthFilter) {
+                targetMonthIndex = hoje.getMonth();
+            } else {
+                targetMonthIndex = parseInt(monthFilter, 10) - 1;
+            }
 
             const people = [];
 
             rows.forEach((row) => {
                 const b1 = parseDateSafe(row.birth_person_1);
-                if (b1 && b1.getMonth() === currentMonth) {
+                if (b1 && b1.getMonth() === targetMonthIndex) {
                     people.push({
                         name: row.name_person_1 || "Homem",
                         birthDate: b1,
@@ -784,7 +841,7 @@
                     });
                 }
                 const b2 = parseDateSafe(row.birth_person_2);
-                if (b2 && b2.getMonth() === currentMonth) {
+                if (b2 && b2.getMonth() === targetMonthIndex) {
                     people.push({
                         name: row.name_person_2 || "Mulher",
                         birthDate: b2,
@@ -795,7 +852,7 @@
                 if (Array.isArray(row.children)) {
                     row.children.forEach((child) => {
                         const cb = parseDateSafe(child.birth);
-                        if (cb && cb.getMonth() === currentMonth) {
+                        if (cb && cb.getMonth() === targetMonthIndex) {
                             people.push({
                                 name: child.name || "Filho(a)",
                                 birthDate: cb,
@@ -823,15 +880,23 @@
                 const day = p.birthDate.getDate();
                 const dateLabel = formatDayMonth(p.birthDate);
 
-                const age = calculateAge(
-                    p.birthDate,
-                    new Date(currentYear, p.birthDate.getMonth(), day)
+                // Data do aniversário neste ano
+                const birthdayThisYear = new Date(
+                    currentYear,
+                    p.birthDate.getMonth(),
+                    day
                 );
 
+                const age = calculateAge(p.birthDate, birthdayThisYear);
+
                 let ageText = "";
-                if (day === currentDay) {
+                if (
+                    birthdayThisYear.getFullYear() === hoje.getFullYear() &&
+                    birthdayThisYear.getMonth() === hoje.getMonth() &&
+                    birthdayThisYear.getDate() === hoje.getDate()
+                ) {
                     ageText = `faz ${age} anos hoje`;
-                } else if (day > currentDay) {
+                } else if (birthdayThisYear > hoje) {
                     ageText = `faz ${age} anos em ${dateLabel}`;
                 } else {
                     ageText = `fez ${age} anos em ${dateLabel}`;
@@ -851,15 +916,21 @@
         function renderWeddings(rows) {
             weddingsList.innerHTML = "";
             const hoje = new Date();
-            const currentMonth = hoje.getMonth();
-            const currentDay = hoje.getDate();
             const currentYear = hoje.getFullYear();
+
+            // Descobre qual mês usar (0..11)
+            let targetMonthIndex;
+            if (!monthFilter) {
+                targetMonthIndex = hoje.getMonth();
+            } else {
+                targetMonthIndex = parseInt(monthFilter, 10) - 1;
+            }
 
             const weddings = [];
 
             rows.forEach((row) => {
                 const wd = parseDateSafe(row.wedding_date);
-                if (wd && wd.getMonth() === currentMonth) {
+                if (wd && wd.getMonth() === targetMonthIndex) {
                     weddings.push({
                         coupleName: row.name_couple || "Casal sem nome",
                         weddingDate: wd,
@@ -883,15 +954,23 @@
             weddings.forEach((w) => {
                 const day = w.weddingDate.getDate();
                 const dateLabel = formatDayMonth(w.weddingDate);
-                const yearsMarried = calculateAge(
-                    w.weddingDate,
-                    new Date(currentYear, w.weddingDate.getMonth(), day)
+
+                const weddingThisYear = new Date(
+                    currentYear,
+                    w.weddingDate.getMonth(),
+                    day
                 );
 
+                const yearsMarried = calculateAge(w.weddingDate, weddingThisYear);
+
                 let textYears = "";
-                if (day === currentDay) {
+                if (
+                    weddingThisYear.getFullYear() === hoje.getFullYear() &&
+                    weddingThisYear.getMonth() === hoje.getMonth() &&
+                    weddingThisYear.getDate() === hoje.getDate()
+                ) {
                     textYears = `completa ${yearsMarried} anos de casados hoje`;
-                } else if (day > currentDay) {
+                } else if (weddingThisYear > hoje) {
                     textYears = `completa ${yearsMarried} anos de casados em ${dateLabel}`;
                 } else {
                     textYears = `completou ${yearsMarried} anos de casados em ${dateLabel}`;
@@ -902,6 +981,7 @@
                 weddingsList.appendChild(li);
             });
         }
+
 
         // ======= EXPORTAR PARA EXCEL =======
         function exportFamiliesToExcel() {
