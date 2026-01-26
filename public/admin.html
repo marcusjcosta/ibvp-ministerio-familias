@@ -304,7 +304,7 @@
         const filterHasChildrenCheckbox =
             document.getElementById("filterHasChildren");
         const filterMembershipTimeSelect = document.getElementById("filter_membership_time");
-        const monthFilterSelect = document.getElementById("monthFilter");
+        const monthFilterSelect = document.getElementById("monthSelector");
         const exportExcelButton = document.getElementById("exportExcelButton");
         const familiesTableBody = document.getElementById("familiesTableBody");
         const familiesCount = document.getElementById("familiesCount");
@@ -435,6 +435,15 @@
                 }
             );
 
+            const hoje = new Date();
+            const currentMonthNumber = hoje.getMonth() + 1; // 1..12
+
+            const monthSelector = document.getElementById("monthSelector");
+            if (monthSelector) {
+                monthSelector.value = String(currentMonthNumber);
+                monthFilter = monthSelector.value; // mantém estado JS alinhado ao select
+            }
+            
             updateMonthLabels();
 
             await loadCouplesFromSupabase();
