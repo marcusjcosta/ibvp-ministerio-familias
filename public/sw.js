@@ -1,16 +1,13 @@
-const CACHE_NAME = "familias-ibvp-v1";
+const CACHE_NAME = "familias-ibvp-v2";
 
 const ASSETS_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/admin.html",
   "/manifest.json",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
   "/icons/icon-1024.png"
 ];
 
-// Instalação: pré-cache dos arquivos principais
+// Instalação: pré-cache de alguns arquivos estáticos
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -19,7 +16,7 @@ self.addEventListener("install", (event) => {
   );
 });
 
-// Ativação: limpeza de caches antigos (se houver)
+// Ativação: limpa caches antigos
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -34,11 +31,21 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch: tenta servir do cache, senão vai para a rede
+// Fetch: NETWORK-FIRST para sempre pegar HTML novo
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    })
+    fetch(event.request)
+      .then((response) => {
+        // Atualiza o cache em segundo plano
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      })
+      .catch(() => {
+        // Se der erro (offline, por exemplo), tenta responder do cache
+        return caches.match(event.request);
+      })
   );
 });
