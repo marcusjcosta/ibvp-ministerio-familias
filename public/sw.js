@@ -7,16 +7,12 @@ const ASSETS_TO_CACHE = [
   "/icons/icon-1024.png"
 ];
 
-// Instalação: pré-cache de alguns arquivos estáticos
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
   );
 });
 
-// Ativação: limpa caches antigos
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -31,21 +27,33 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Fetch: NETWORK-FIRST para sempre pegar HTML novo
 self.addEventListener("fetch", (event) => {
+  const request = event.request;
+
+  // Ignorar qualquer coisa que não seja http(s)
+  if (!request.url.startsWith("http")) return;
+
+  // Só GET
+  if (request.method !== "GET") return;
+
+  // (Opcional) só cachear arquivos do próprio domínio
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) {
+    event.respondWith(fetch(request)); // sem cache
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request)
+    fetch(request)
       .then((response) => {
-        // Atualiza o cache em segundo plano
-        const responseClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseClone);
-        });
+        const clone = response.clone();
+        caches.open(CACHE_NAME)
+          .then((cache) => cache.put(request, clone))
+          .catch((err) => {
+            console.warn("Falha ao salvar no cache:", err);
+          });
         return response;
       })
-      .catch(() => {
-        // Se der erro (offline, por exemplo), tenta responder do cache
-        return caches.match(event.request);
-      })
+      .catch(() => caches.match(request))
   );
 });
