@@ -1,112 +1,89 @@
 Ministério de Famílias – IBVP
-
 Sistema de Cadastro e Administração de Famílias
-ibvp-ministerio-familias.netlify.app
+PWA • HTML • CSS • JavaScript • Supabase
+Sobre o Projeto
 
-📌 Sobre o projeto
+Este projeto é uma aplicação web leve, simples e instalável (PWA), criada para apoiar o Ministério de Famílias da Igreja Batista de Vargem Pequena (IBVP) no cadastro, acompanhamento e organização das famílias da igreja.
 
-Este projeto é uma aplicação web desenvolvida para o Ministério de Famílias da Igreja Batista de Vargem Pequena (IBVP).
-O objetivo é facilitar:
+A solução foi desenvolvida para:
 
-o cadastro de famílias, com dados individuais de cada membro;
+facilitar o cadastro de famílias durante os cultos;
 
-o acompanhamento pastoral, incluindo aniversários, situação de membresia e informações de contato;
+apoiar o acompanhamento pastoral, incluindo aniversários, situação de membresia e tempo de frequência;
 
-o acesso rápido por meio de QR Code para preenchimento no culto;
+permitir busca rápida no painel administrativo;
 
-a consulta organizada das informações em um painel administrativo visual.
+funcionar em qualquer dispositivo, inclusive como aplicativo instalado no celular.
 
-A aplicação é totalmente serverless, rápida, leve e acessível de qualquer dispositivo — inclusive como PWA, podendo ser instalada no celular da liderança do ministério (Android e iPhone).
+O sistema é estático e utiliza exclusivamente HTML, CSS, JavaScript e Supabase.
 
-🧩 Arquitetura da solução
-
-A aplicação utiliza:
-
+Arquitetura da Solução
 Frontend
 
-HTML + CSS (TailwindCSS) — rápido, responsivo e sem frameworks pesados
+HTML5
 
-JavaScript Vanilla — para validações, manipulação do DOM e chamadas à API
+CSS e TailwindCSS
 
-PWA — permite instalação no celular
+JavaScript (Vanilla)
 
-Hospedado gratuitamente no Netlify
+PWA (manifest, instalação e ícones)
 
-Backend
+Banco de Dados
 
-Netlify Functions (Serverless)
+Supabase (PostgreSQL em nuvem)
 
-Função principal: /createCouple
+Comunicação direta via REST API
 
-Faz a ponte entre o formulário e o banco de dados
+Chave pública (anon key) com permissões limitadas
 
-Banco de dados
+RLS desativado, pois o fluxo atual não utiliza autenticação
 
-Supabase (Postgres)
-
-Acesso via API REST com chave pública (publishable key)
-
-RLS desativado, pois:
-
-não há contas de usuário nesta versão
-
-somente a função serverless realiza operações de escrita
-
-o conteúdo é público de forma controlada apenas para leitura no painel admin
+Não armazena dados sensíveis (como CPF ou RG)
 
 Segurança
 
-Mesmo com RLS desativado:
+A chave pública utilizada possui permissões restritas
 
-A chave utilizada é publica e com permissões limitadas
+O sistema inclui termo de consentimento conforme LGPD
 
-A escrita no banco só pode ser feita por meio da function serverless, nunca pelo frontend diretamente
+Uso limitado e transparente, destinado exclusivamente ao Ministério de Famílias
 
-Não há dados sensíveis críticos (como RG, CPF, renda etc.)
-
-A LGPD é respeitada com transparência, finalidade específica e consentimento no formulário
-
-📄 Funcionalidades
-1. Formulário de cadastro
-
-Disponível em:
-➡️ https://ibvp-ministerio-familias.netlify.app
+Funcionalidades
+1. Formulário Público de Cadastro
 
 Campos incluídos:
 
-Dados do casal
+Dados do casal:
 
 Nome do homem
 
 Nome da mulher
 
-Nome do casal (gerado automaticamente se vazio)
+Nome da família (gerado automaticamente)
 
-Datas importantes
+Datas importantes:
 
-Data de nascimento dele
+Aniversário dele
 
-Data de nascimento dela
+Aniversário dela
 
 Aniversário de casamento
 
-Contatos e endereço
+Contatos e endereço:
 
-Telefone dele / e-mail dele
+Telefones individuais
 
-Telefone dela / e-mail dela
+E-mails individuais
 
 Endereço da família
 
-Filhos
+Filhos:
 
-Quantos filhos
+Quantidade dinâmica
 
 Nome e data de nascimento de cada filho
 
-Situação na igreja
-
-Para cada pessoa:
+Situação na igreja e histórico:
 
 Membro da IBVP
 
@@ -114,144 +91,126 @@ Membro de outra igreja (com nome)
 
 Não é membro
 
-Consentimento LGPD
+Tempo de frequência na IBVP (quando aplicável)
 
-O formulário inclui um checkbox obrigatório com texto de consentimento claro.
+LGPD:
+
+Checkbox obrigatório de consentimento
 
 2. Painel Administrativo
 
-Disponível em:
-➡️ https://ibvp-ministerio-familias.netlify.app/admin.html
+Busca por nome do casal, homem, mulher ou filhos
 
-Funcionalidades:
+Listagem leve com informações principais
 
-Busca por nome do casal, do homem, da mulher ou do filho
+Cálculo automático de idades
 
-Listagem leve em tabela, com:
+Exibição de aniversariantes do dia, da semana e do mês
 
-Nome do casal
+Visualização completa dos dados da família
 
-Contato principal
+Tempo de frequência exibido no perfil
 
-Situação de membresia do casal
+Exportação de registros em formato Excel (.xlsx)
 
-Filtros rápidos:
+QR Code estável gerado automaticamente para acesso ao formulário
 
-Apenas membros da IBVP
+Instalação como PWA
+iPhone (Safari)
 
-Apenas famílias com filhos
+Abrir o link
 
-Exportação para Excel (.xlsx) – mais amigável do que CSV
+Tocar em "Compartilhar"
 
-Painel de aniversariantes, que exibe:
+Selecionar "Adicionar à Tela de Início"
 
-Homem, mulher, filhos
+Android (Chrome)
 
-Idade atual ou “faz X anos hoje / em dd/mm”
+Abrir o link
 
-QR Code automático apontando para a URL atual do formulário
+Tocar nos três pontos
 
-📲 Instalação como PWA
+Selecionar "Instalar Aplicativo"
 
-O sistema é um PWA completo:
-
-No iPhone (Safari):
-
-Abra o link do painel
-
-Toque em Compartilhar
-
-Toque em Adicionar à Tela de Início
-
-No Android (Chrome):
-
-Abra o link
-
-Toque nos três pontinhos
-
-Instalar Aplicativo
-
-📂 Estrutura do projeto
+Estrutura do Projeto
 /
-├── netlify/
-│   └── functions/
-│       ├── createCouple.js
-│       └── hello.js
-├── public/
-│   ├── index.html
-│   ├── admin.html
-│   ├── manifest.json
-│   ├── logo-ibvp.png
-│   └── icon-*.png (PWA icons)
-└── README.md
+├── index.html
+├── admin.html
+├── manifest.json
+├── style.css
+├── app.js
+├── admin.js
+├── logo-ibvp.png
+└── icons/
 
-🚀 Como rodar localmente
+Como Rodar Localmente
 
-Requer:
+Clone o repositório:
 
-Node.js (LTS)
-
-Conta no GitHub
-
-Conta no Netlify
-
-Conta no Supabase
-
-1. Clone o repositório
 git clone https://github.com/marcusjcosta/ibvp-ministerio-familias.git
 cd ibvp-ministerio-familias
 
-2. Instale o Netlify CLI (opcional, para testar localmente)
-npm install -g netlify-cli
 
-3. Rode localmente
-netlify dev
+Abra o arquivo index.html no navegador
+(ou utilize uma ferramenta como "Live Server" no VS Code).
 
-🔐 Variáveis de ambiente
+Configure as chaves do Supabase diretamente nos arquivos JavaScript.
 
-No Netlify → Site → Environment Variables:
+Configuração do Supabase
 
-SUPABASE_URL=SEU_PROJETO_URL
-SUPABASE_PUBLISHABLE_KEY=sua_chave_publica
+No Supabase, crie a tabela conforme o schema usado pelo projeto.
 
+Configure no frontend:
 
-Nenhuma variável secreta é exposta no frontend.
-
-🛠️ Deploy
-
-O deploy é automático via Git:
-
-git add .
-git commit -m "Atualiza projeto"
-git push
+SUPABASE_URL=<sua-url>
+SUPABASE_ANON_KEY=<sua-chave-publica>
 
 
-O Netlify detecta e publica automaticamente.
+Essas chaves são utilizadas pelos arquivos JavaScript.
 
-📞 Suporte e evolução
+Deploy
 
-Este projeto foi desenvolvido de forma incremental e simples, com foco em:
+A aplicação pode ser hospedada em qualquer serviço de páginas estáticas, como:
 
-rapidez de uso
+GitHub Pages
 
-facilidade para voluntários
+Vercel
 
-segurança adequada
+Firebase Hosting
 
-baixo custo (tudo gratuito)
+Supabase Storage
 
-Futuras melhorias planejadas:
+Hospedagens estáticas em geral
 
-Upload de fotos das famílias
+Basta enviar os arquivos do diretório raiz.
 
-Painel com gráficos mensais
+Suporte e Evolução
 
-Notificações de aniversariantes
+O sistema foi desenvolvido com foco em:
 
-Autenticação (Admin login)
+praticidade
 
-✨ Autor
+baixo custo
+
+facilidade de manutenção
+
+acessibilidade para voluntários
+
+Possíveis evoluções futuras incluem:
+
+upload de fotos das famílias
+
+painel analítico
+
+notificações automáticas de aniversariantes
+
+autenticação para administradores
+
+histórico de visitas e interações pastorais
+
+Autor
 
 Marcus Costa
+marcus.costa@resultaat.com.br
 Desenvolvido para o Ministério de Famílias – IBVP
 2026
