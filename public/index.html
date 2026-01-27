@@ -289,9 +289,16 @@
                 <h2 class="text-lg font-semibold text-slate-700 mb-3">
                     Observações
                 </h2>
+
+                <p class="text-xs text-slate-500 mb-2">
+                    Este espaço é para você compartilhar livremente qualquer detalhe, pedido ou informação que deseja
+                    que o Ministério de Famílias conheça.
+                </p>
+
                 <textarea id="notes" rows="3"
                     class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"></textarea>
             </section>
+
 
             <div id="message" class="text-sm"></div>
 
@@ -553,7 +560,7 @@
                 notes: document.getElementById("notes").value || null,
             };
 
-                        try {
+            try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/couples`, {
                     method: "POST",
                     headers: {
