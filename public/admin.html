@@ -261,16 +261,13 @@
     </div>
 
     <script>
-        // ======= CONFIGURAÇÕES =======
-        // 1) preencha com a URL do projeto Supabase (sem barra no final)
-        const SUPABASE_URL = "https://bdtqnqaqgbtxchoynpug.supabase.co";
-        // 2) preencha com a chave pública (anon / publishable) do Supabase
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkdHFucWFxZ2J0eGNob3lucHVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxOTkwNzIsImV4cCI6MjA4NDc3NTA3Mn0.o6TN8wwvUdtyB7dENSGqnrezfndLFZjmNsFja2LgfEM";
 
-        // 3) URL pública do formulário (index.html)
+        const API_URL = "/api/couples";
+
+        // URL pública do formulário (index.html)
         const FORM_URL = "https://ibvp-ministerio-familias.vercel.app/";
 
-        // 4) senha simples do painel (troque por algo só de vocês)
+        // senha simples do painel (troque por algo só de vocês)
         const ADMIN_PASSWORD = "familias2026";
 
         // ======= ESTADO EM MEMÓRIA =======
@@ -456,19 +453,11 @@
         // ======= BUSCA NO SUPABASE =======
         async function loadCouplesFromSupabase() {
             try {
-                const resp = await fetch(
-                    `${SUPABASE_URL}/rest/v1/couples?select=*`,
-                    {
-                        headers: {
-                            apikey: SUPABASE_ANON_KEY,
-                            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                        },
-                    }
-                );
+                const resp = await fetch(API_URL);
 
                 if (!resp.ok) {
                     console.error("Erro ao buscar couples", await resp.text());
-                    alert("Erro ao carregar famílias do Supabase.");
+                    alert("Erro ao carregar famílias.");
                     return;
                 }
 
