@@ -2,6 +2,7 @@ export default async function handler(req, res) {
   const APPS_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbxz2Xt7sdZdVSOlH6xDVzGjzlsl_OrrY7y2P1-uSD-WUPF4CblFLY4Y-N4G0lOCXOZRxA/exec";
 
+  // CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -11,6 +12,9 @@ export default async function handler(req, res) {
   }
 
   try {
+    // =====================
+    // GET → buscar dados
+    // =====================
     if (req.method === "GET") {
       const response = await fetch(APPS_SCRIPT_URL, {
         method: "GET",
@@ -20,13 +24,21 @@ export default async function handler(req, res) {
       return res.status(response.ok ? 200 : 500).send(text);
     }
 
+    // =====================
+    // POST → salvar dados
+    // =====================
     if (req.method === "POST") {
+      const body =
+        typeof req.body === "string"
+          ? req.body
+          : JSON.stringify(req.body);
+
       const response = await fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "text/plain;charset=utf-8",
         },
-        body: JSON.stringify(req.body),
+        body: body,
       });
 
       const text = await response.text();
