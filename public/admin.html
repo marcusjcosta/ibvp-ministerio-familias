@@ -801,9 +801,57 @@
               ${notesText}
             </p>
           </section>
+
+          <section class="pt-2">
+            <button
+              id="deleteFamilyButton"
+              class="inline-flex items-center justify-center rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-red-700"
+            >
+              Excluir cadastro
+            </button>
+          </section>
         `;
 
             familyDetailsOverlay.classList.remove("hidden");
+
+            const deleteButton = document.getElementById("deleteFamilyButton");
+
+            deleteButton.addEventListener("click", async () => {
+                const confirmed = confirm(
+                    `Tem certeza que deseja excluir o cadastro de "${row.name_couple || "esta família"}"?`
+                );
+
+                if (!confirmed) return;
+
+                try {
+                    const resp = await fetch(API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            action: "delete",
+                            id: row.id,
+                        }),
+                    });
+
+                    const result = await resp.json();
+
+                    if (!resp.ok || !result.success) {
+                        alert("Não foi possível excluir o cadastro.");
+                        console.error(result);
+                        return;
+                    }
+
+                    closeFamilyDetails();
+                    await loadCouplesFromSupabase();
+                    applyFiltersAndRender();
+                    alert("Cadastro excluído com sucesso.");
+                } catch (err) {
+                    console.error(err);
+                    alert("Erro ao excluir cadastro.");
+                }
+            });
         }
 
         function closeFamilyDetails() {
