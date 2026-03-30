@@ -681,32 +681,29 @@
             const birth2 = parseDateSafe(row.birth_person_2);
             const wedding = parseDateSafe(row.wedding_date);
 
-            let birth1Text = "Não informado";
-            if (birth1) {
-                const age1 = calculateAge(birth1, hoje);
-                birth1Text = `${formatDateFull(birth1)} (${age1} anos)`;
-            }
+            let birth1Text = row.birth_person_1 || "";
+            let birth2Text = row.birth_person_2 || "";
+            let weddingText = row.wedding_date || "";
 
-            let birth2Text = "Não informado";
-            if (birth2) {
-                const age2 = calculateAge(birth2, hoje);
-                birth2Text = `${formatDateFull(birth2)} (${age2} anos)`;
-            }
+            const membershipTimeText = row.membership_time || "";
+            const phone1 = row.phone_person_1 || "";
+            const phone2 = row.phone_person_2 || "";
+            const email1 = row.email_person_1 || "";
+            const email2 = row.email_person_2 || "";
+            const address = row.address || "";
+            const notesText = row.notes || "";
 
-            let weddingText = "Não informado";
-            if (wedding) {
-                const years = calculateAge(wedding, hoje);
-                weddingText = `${formatDateFull(wedding)} (${years} anos de casados)`;
-            }
+            const status1 = row.is_member_person_1
+                ? "ibvp"
+                : row.other_church_person_1
+                    ? "other"
+                    : "none";
 
-            const membershipPerson1 = buildIndividualMembershipText(
-                !!row.is_member_person_1,
-                row.other_church_person_1
-            );
-            const membershipPerson2 = buildIndividualMembershipText(
-                !!row.is_member_person_2,
-                row.other_church_person_2
-            );
+            const status2 = row.is_member_person_2
+                ? "ibvp"
+                : row.other_church_person_2
+                    ? "other"
+                    : "none";
 
             const childrenHtml = (Array.isArray(row.children) && row.children.length > 0)
                 ? row.children
@@ -723,98 +720,231 @@
                     .join("")
                 : '<li class="text-xs text-slate-400">Nenhum filho informado.</li>';
 
-            const notesText = row.notes
-                ? row.notes
-                : "Nenhuma observação enviada pela família.";
-
-            const membershipTimeText = row.membership_time
-                ? row.membership_time
-                : "Não informado.";
-
-            const phone1 = row.phone_person_1 || "Não informado";
-            const phone2 = row.phone_person_2 || "Não informado";
-            const email1 = row.email_person_1 || "Não informado";
-            const email2 = row.email_person_2 || "Não informado";
-            const address = row.address || "Não informado";
-
             familyDetailsContent.innerHTML = `
-          <section>
+      <section>
+        <div class="flex items-center justify-between gap-3">
+          <div>
             <h3 class="text-base font-semibold text-slate-800 mb-1">
               ${row.name_couple || "Família sem nome definido"}
             </h3>
             <p class="text-xs text-slate-500">
               Visão geral dos dados enviados pela família.
             </p>
-          </section>
-
-          <section class="border rounded-xl border-slate-200 p-3">
-            <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">
-              Homem
-            </h4>
-            <p><span class="font-medium">Nome:</span> ${row.name_person_1 || "Não informado"}</p>
-            <p><span class="font-medium">Nascimento:</span> ${birth1Text}</p>
-            <p><span class="font-medium">Telefone:</span> ${phone1}</p>
-            <p><span class="font-medium">E-mail:</span> ${email1}</p>
-            <p><span class="font-medium">Situação na igreja:</span> ${membershipPerson1}</p>
-          </section>
-
-          <section class="border rounded-xl border-slate-200 p-3">
-            <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">
-              Mulher
-            </h4>
-            <p><span class="font-medium">Nome:</span> ${row.name_person_2 || "Não informado"}</p>
-            <p><span class="font-medium">Nascimento:</span> ${birth2Text}</p>
-            <p><span class="font-medium">Telefone:</span> ${phone2}</p>
-            <p><span class="font-medium">E-mail:</span> ${email2}</p>
-            <p><span class="font-medium">Situação na igreja:</span> ${membershipPerson2}</p>
-          </section>
-
-          <section class="border rounded-xl border-slate-200 p-3">
-            <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">
-              Casamento
-            </h4>
-            <p><span class="font-medium">Aniversário de casamento:</span> ${weddingText}</p>
-          </section>
-
-          <section class="border rounded-xl border-slate-200 p-3">
-            <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">
-              Endereço e tempo na IBVP
-            </h4>
-            <p><span class="font-medium">Endereço do casal:</span> ${address}</p>
-            <p><span class="font-medium">Tempo na IBVP (informado pela família):</span> ${membershipTimeText}</p>
-          </section>
-
-          <section class="border rounded-xl border-slate-200 p-3">
-            <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">
-              Filhos
-            </h4>
-            <ul class="list-disc list-inside space-y-1">
-              ${childrenHtml}
-            </ul>
-          </section>
-
-          <section class="border rounded-xl border-slate-200 p-3">
-            <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">
-              Mensagem da família para o Ministério de Famílias
-            </h4>
-            <p class="whitespace-pre-wrap text-sm text-slate-800">
-              ${notesText}
-            </p>
-          </section>
-
-          <section class="pt-2">
+          </div>
+          <div class="flex gap-2">
+            <button
+              id="editFamilyButton"
+              class="inline-flex items-center justify-center rounded-xl bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-amber-700"
+            >
+              Editar cadastro
+            </button>
             <button
               id="deleteFamilyButton"
               class="inline-flex items-center justify-center rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-red-700"
             >
               Excluir cadastro
             </button>
-          </section>
-        `;
+          </div>
+        </div>
+      </section>
+
+      <div id="familyViewMode" class="space-y-4">
+        <section class="border rounded-xl border-slate-200 p-3">
+          <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Homem</h4>
+          <p><span class="font-medium">Nome:</span> ${row.name_person_1 || "Não informado"}</p>
+          <p><span class="font-medium">Nascimento:</span> ${birth1 ? `${formatDateFull(birth1)} (${calculateAge(birth1, hoje)} anos)` : "Não informado"
+                }</p>
+          <p><span class="font-medium">Telefone:</span> ${phone1 || "Não informado"}</p>
+          <p><span class="font-medium">E-mail:</span> ${email1 || "Não informado"}</p>
+          <p><span class="font-medium">Situação na igreja:</span> ${buildIndividualMembershipText(
+                    !!row.is_member_person_1,
+                    row.other_church_person_1
+                )}</p>
+        </section>
+
+        <section class="border rounded-xl border-slate-200 p-3">
+          <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Mulher</h4>
+          <p><span class="font-medium">Nome:</span> ${row.name_person_2 || "Não informado"}</p>
+          <p><span class="font-medium">Nascimento:</span> ${birth2 ? `${formatDateFull(birth2)} (${calculateAge(birth2, hoje)} anos)` : "Não informado"
+                }</p>
+          <p><span class="font-medium">Telefone:</span> ${phone2 || "Não informado"}</p>
+          <p><span class="font-medium">E-mail:</span> ${email2 || "Não informado"}</p>
+          <p><span class="font-medium">Situação na igreja:</span> ${buildIndividualMembershipText(
+                    !!row.is_member_person_2,
+                    row.other_church_person_2
+                )}</p>
+        </section>
+
+        <section class="border rounded-xl border-slate-200 p-3">
+          <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Casamento</h4>
+          <p><span class="font-medium">Aniversário de casamento:</span> ${wedding ? `${formatDateFull(wedding)} (${calculateAge(wedding, hoje)} anos de casados)` : "Não informado"
+                }</p>
+        </section>
+
+        <section class="border rounded-xl border-slate-200 p-3">
+          <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Endereço e tempo na IBVP</h4>
+          <p><span class="font-medium">Endereço do casal:</span> ${address || "Não informado"}</p>
+          <p><span class="font-medium">Tempo na IBVP:</span> ${membershipTimeText || "Não informado"}</p>
+        </section>
+
+        <section class="border rounded-xl border-slate-200 p-3">
+          <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Filhos</h4>
+          <ul class="list-disc list-inside space-y-1">
+            ${childrenHtml}
+          </ul>
+        </section>
+
+        <section class="border rounded-xl border-slate-200 p-3">
+          <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Mensagem da família</h4>
+          <p class="whitespace-pre-wrap text-sm text-slate-800">
+            ${notesText || "Nenhuma observação enviada pela família."}
+          </p>
+        </section>
+      </div>
+
+      <div id="familyEditMode" class="hidden space-y-4">
+        <section class="border rounded-xl border-slate-200 p-3 space-y-3">
+          <h4 class="text-xs font-semibold text-slate-600 uppercase">Dados do casal</h4>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Nome do casal</label>
+            <input id="edit_name_couple" type="text" value="${row.name_couple || ""}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Nome do homem</label>
+            <input id="edit_name_person_1" type="text" value="${row.name_person_1 || ""}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Nascimento do homem</label>
+            <input id="edit_birth_person_1" type="date" value="${birth1Text}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Telefone do homem</label>
+            <input id="edit_phone_person_1" type="text" value="${phone1}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">E-mail do homem</label>
+            <input id="edit_email_person_1" type="email" value="${email1}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Situação do homem na igreja</label>
+            <select id="edit_status_person_1" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+              <option value="ibvp" ${status1 === "ibvp" ? "selected" : ""}>Membro da IBVP</option>
+              <option value="other" ${status1 === "other" ? "selected" : ""}>Membro de outra igreja</option>
+              <option value="none" ${status1 === "none" ? "selected" : ""}>Não é membro de nenhuma igreja</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Outra igreja do homem</label>
+            <input id="edit_other_church_person_1" type="text" value="${row.other_church_person_1 || ""}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Nome da mulher</label>
+            <input id="edit_name_person_2" type="text" value="${row.name_person_2 || ""}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Nascimento da mulher</label>
+            <input id="edit_birth_person_2" type="date" value="${birth2Text}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Telefone da mulher</label>
+            <input id="edit_phone_person_2" type="text" value="${phone2}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">E-mail da mulher</label>
+            <input id="edit_email_person_2" type="email" value="${email2}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Situação da mulher na igreja</label>
+            <select id="edit_status_person_2" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+              <option value="ibvp" ${status2 === "ibvp" ? "selected" : ""}>Membro da IBVP</option>
+              <option value="other" ${status2 === "other" ? "selected" : ""}>Membro de outra igreja</option>
+              <option value="none" ${status2 === "none" ? "selected" : ""}>Não é membro de nenhuma igreja</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Outra igreja da mulher</label>
+            <input id="edit_other_church_person_2" type="text" value="${row.other_church_person_2 || ""}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Aniversário de casamento</label>
+            <input id="edit_wedding_date" type="date" value="${weddingText}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Endereço</label>
+            <input id="edit_address" type="text" value="${address}"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Tempo na IBVP</label>
+            <select id="edit_membership_time" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+              <option value="" ${membershipTimeText === "" ? "selected" : ""}>Selecione</option>
+              <option value="Menos de 1 ano" ${membershipTimeText === "Menos de 1 ano" ? "selected" : ""}>Menos de 1 ano</option>
+              <option value="Entre 1 e 3 anos" ${membershipTimeText === "Entre 1 e 3 anos" ? "selected" : ""}>Entre 1 e 3 anos</option>
+              <option value="Entre 3 e 5 anos" ${membershipTimeText === "Entre 3 e 5 anos" ? "selected" : ""}>Entre 3 e 5 anos</option>
+              <option value="Mais de 5 anos" ${membershipTimeText === "Mais de 5 anos" ? "selected" : ""}>Mais de 5 anos</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Observações</label>
+            <textarea id="edit_notes" rows="4"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">${notesText}</textarea>
+          </div>
+
+          <div class="flex gap-2 pt-2">
+            <button
+              id="saveFamilyButton"
+              class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700"
+            >
+              Salvar alterações
+            </button>
+            <button
+              id="cancelEditFamilyButton"
+              class="inline-flex items-center justify-center rounded-xl bg-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 shadow hover:bg-slate-400"
+            >
+              Cancelar
+            </button>
+          </div>
+        </section>
+      </div>
+    `;
 
             familyDetailsOverlay.classList.remove("hidden");
 
             const deleteButton = document.getElementById("deleteFamilyButton");
+            const editButton = document.getElementById("editFamilyButton");
+            const saveButton = document.getElementById("saveFamilyButton");
+            const cancelButton = document.getElementById("cancelEditFamilyButton");
+            const viewMode = document.getElementById("familyViewMode");
+            const editMode = document.getElementById("familyEditMode");
 
             deleteButton.addEventListener("click", async () => {
                 const confirmed = confirm(
@@ -850,6 +980,80 @@
                 } catch (err) {
                     console.error(err);
                     alert("Erro ao excluir cadastro.");
+                }
+            });
+
+            editButton.addEventListener("click", () => {
+                viewMode.classList.add("hidden");
+                editMode.classList.remove("hidden");
+            });
+
+            cancelButton.addEventListener("click", () => {
+                editMode.classList.add("hidden");
+                viewMode.classList.remove("hidden");
+            });
+
+            saveButton.addEventListener("click", async () => {
+                const status1Value = document.getElementById("edit_status_person_1").value;
+                const status2Value = document.getElementById("edit_status_person_2").value;
+
+                const payload = {
+                    action: "update_couple",
+                    id: row.id,
+                    name_couple: document.getElementById("edit_name_couple").value.trim(),
+                    name_person_1: document.getElementById("edit_name_person_1").value.trim(),
+                    name_person_2: document.getElementById("edit_name_person_2").value.trim(),
+                    birth_person_1: document.getElementById("edit_birth_person_1").value || "",
+                    birth_person_2: document.getElementById("edit_birth_person_2").value || "",
+                    wedding_date: document.getElementById("edit_wedding_date").value || "",
+                    phone_person_1: document.getElementById("edit_phone_person_1").value.trim(),
+                    phone_person_2: document.getElementById("edit_phone_person_2").value.trim(),
+                    email_person_1: document.getElementById("edit_email_person_1").value.trim(),
+                    email_person_2: document.getElementById("edit_email_person_2").value.trim(),
+                    address: document.getElementById("edit_address").value.trim(),
+                    membership_time: document.getElementById("edit_membership_time").value || "",
+                    notes: document.getElementById("edit_notes").value.trim(),
+                    is_member_person_1: status1Value === "ibvp",
+                    is_member_person_2: status2Value === "ibvp",
+                    other_church_person_1: status1Value === "other"
+                        ? document.getElementById("edit_other_church_person_1").value.trim()
+                        : "",
+                    other_church_person_2: status2Value === "other"
+                        ? document.getElementById("edit_other_church_person_2").value.trim()
+                        : ""
+                };
+
+                try {
+                    const resp = await fetch(API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(payload),
+                    });
+
+                    const result = await resp.json();
+
+                    if (!resp.ok || !result.success) {
+                        alert("Não foi possível salvar as alterações.");
+                        console.error(result);
+                        return;
+                    }
+
+                    await loadCouplesFromSupabase();
+                    applyFiltersAndRender();
+
+                    const updatedRow = couples.find((item) => String(item.id) === String(row.id));
+                    if (updatedRow) {
+                        openFamilyDetails(updatedRow);
+                    } else {
+                        closeFamilyDetails();
+                    }
+
+                    alert("Cadastro atualizado com sucesso.");
+                } catch (err) {
+                    console.error(err);
+                    alert("Erro ao salvar alterações.");
                 }
             });
         }
