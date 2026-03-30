@@ -87,7 +87,7 @@
                     </p>
                     <div class="flex flex-col items-center gap-2 md:flex-row md:items-center md:gap-4">
                         <div class="flex flex-col items-center gap-2 shrink-0">
-                            <canvas id="qrCanvas" class="border border-slate-200 rounded-xl bg-white w-20 h-20 md:w-[180px] md:h-[180px]"></canvas>
+                            <canvas id="qrCanvas" class="border border-slate-200 rounded-xl bg-white w-24 h-24 md:w-[180px] md:h-[180px] max-w-full h-auto block mx-auto"></canvas>
                             <button id="downloadQrButton"
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-100 px-2 py-1 md:px-3 md:py-1 text-[11px] md:text-xs font-medium text-slate-700 hover:bg-slate-200">
                                 Baixar QR
@@ -125,7 +125,7 @@
                                 class="w-20 h-20 md:w-[180px] md:h-[180px] border border-dashed border-slate-300 rounded-xl bg-slate-50 flex items-center justify-center text-[11px] md:text-xs text-slate-400 text-center px-3">
                                 Formulário 60+ ainda não configurado
                             </div>
-                            <canvas id="qrCanvasSenior" class="hidden border border-slate-200 rounded-xl bg-white w-24 h-24 md:w-[220px] md:h-[220px]"></canvas>
+                            <canvas id="qrCanvasSenior" class="hidden border border-slate-200 rounded-xl bg-white w-24 h-24 md:w-[180px] md:h-[180px] max-w-full h-auto block mx-auto"></canvas>
                             <button id="downloadQr60Button"
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-100 px-2 py-1 md:px-3 md:py-1 text-[11px] md:text-xs font-medium text-slate-700 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 Baixar QR
@@ -648,6 +648,8 @@
                         }
                     }
                 );
+                qrCanvasSenior.style.width = window.innerWidth < 640 ? "96px" : "180px";
+                qrCanvasSenior.style.height = window.innerWidth < 640 ? "96px" : "180px";
             }
         }
 
@@ -680,7 +682,7 @@
                 qrCanvas,
                 FORM_URL,
                 {
-                    width: 220,
+                    width: window.innerWidth < 640 ? 96 : 180,
                 },
                 (error) => {
                     if (error) {
@@ -688,6 +690,8 @@
                     }
                 }
             );
+            qrCanvas.style.width = window.innerWidth < 640 ? "96px" : "180px";
+            qrCanvas.style.height = window.innerWidth < 640 ? "96px" : "180px";
 
             updateSeniorFormCard();
 
