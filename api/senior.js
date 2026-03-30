@@ -1,24 +1,48 @@
 export default async function handler(req, res) {
+  const APPS_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxz2Xt7sdZdVSOlH6xDVzGjzlsl_OrrY7y2P1-uSD-WUPF4CblFLY4Y-N4G0lOCXOZRxA/exec?sheet=senior_60_plus";
+
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   try {
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxz2Xt7sdZdVSOlH6xDVzGjzlsl_OrrY7y2P1-uSD-WUPF4CblFLY4Y-N4G0lOCXOZRxA/exec?sheet=senior_60_plus";
+    if (req.method === "GET") {
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: "GET",
+      });
 
-    const response = await fetch(scriptUrl, {
-      method: "GET",
-    });
-
-    const text = await response.text();
-
-    if (!response.ok) {
-      return res.status(response.status).send(text);
+      const text = await response.text();
+      return res.status(response.ok ? 200 : 500).send(text);
     }
 
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    return res.status(200).send(text);
+    if (req.method === "POST") {
+      const body =
+        typeof req.body === "string"
+          ? req.body
+          : JSON.stringify(req.body);
+
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: body,
+      });
+
+      const text = await response.text();
+      return res.status(response.ok ? 200 : 500).send(text);
+    }
+
+    return res.status(405).json({ error: "Method not allowed" });
   } catch (error) {
-    console.error("Erro em /api/senior:", error);
     return res.status(500).json({
-      success: false,
-      error: "Erro ao carregar senior_60_plus"
+      error: "Proxy error",
+      details: String(error),
     });
   }
 }
