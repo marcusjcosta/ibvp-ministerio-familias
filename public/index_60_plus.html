@@ -185,19 +185,21 @@
                             <option value="Não">Não</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">
-                            Nome do cônjuge
-                        </label>
-                        <input type="text" id="nome_conjuge"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">
-                            Data de casamento
-                        </label>
-                        <input type="date" id="data_casamento"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    <div id="conjuge_fields" class="hidden md:col-span-2 grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">
+                                Nome do cônjuge
+                            </label>
+                            <input type="text" id="nome_conjuge"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">
+                                Data de casamento
+                            </label>
+                            <input type="date" id="data_casamento"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -254,6 +256,10 @@
         const outraIgrejaWrapper = document.getElementById("outra_igreja_wrapper");
         const outraIgrejaInput = document.getElementById("outra_igreja");
         const consentCheckbox = document.getElementById("consent");
+        const estadoCivilSelect = document.getElementById("estado_civil");
+        const conjugeFields = document.getElementById("conjuge_fields");
+        const nomeConjugeInput = document.getElementById("nome_conjuge");
+        const dataCasamentoInput = document.getElementById("data_casamento");
 
         const API_URL = "/api/senior";
 
@@ -284,8 +290,22 @@
             return age;
         }
 
+        function updateConjugeVisibility() {
+            const isCasado = estadoCivilSelect.value === "Casado(a)";
+
+            if (isCasado) {
+                conjugeFields.classList.remove("hidden");
+            } else {
+                conjugeFields.classList.add("hidden");
+                nomeConjugeInput.value = "";
+                dataCasamentoInput.value = "";
+            }
+        }
+
         situacaoIgrejaSelect.addEventListener("change", updateOutraIgrejaVisibility);
+        estadoCivilSelect.addEventListener("change", updateConjugeVisibility);
         updateOutraIgrejaVisibility();
+        updateConjugeVisibility();
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
