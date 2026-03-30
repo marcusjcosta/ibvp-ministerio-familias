@@ -1852,10 +1852,6 @@
                         Nenhuma pessoa 60+ encontrada com os filtros/busca atuais.
                     </td>
                 `;
-                tr.addEventListener("click", () => {
-                    openSeniorDetails(row);
-                });
-
                 seniorTableBody.appendChild(tr);
                 seniorCount.textContent = "0 pessoa(s) listada(s).";
                 return;
@@ -1886,6 +1882,11 @@
                         ${familia}
                     </td>
                 `;
+
+                tr.classList.add("cursor-pointer");
+                tr.addEventListener("click", () => {
+                    openSeniorDetails(row);
+                });
 
                 seniorTableBody.appendChild(tr);
             });
