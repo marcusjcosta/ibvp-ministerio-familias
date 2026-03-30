@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Cadastro 60+ - IBVP</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link rel="icon" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="IBVP 60+" />
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function () {
+                navigator.serviceWorker
+                    .register("/sw.js")
+                    .catch((err) => console.error("SW registration failed:", err));
+            });
+        }
+    </script>
+</head>
+
+<body class="min-h-screen bg-slate-100 flex items-center justify-center py-10">
+    <div class="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-8">
+        <header class="mb-8">
+            <div class="flex flex-col items-center gap-3">
+                <div class="flex items-center gap-3">
+                    <img src="/icons/icon-1024.png" alt="Igreja Batista de Vargem Pequena" class="h-12 w-auto" />
+                    <div class="text-left">
+                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                            Igreja Batista de Vargem Pequena
+                        </p>
+                        <h1 class="text-2xl font-bold text-slate-800">
+                            Ministério de Famílias
+                        </h1>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-500 mt-1">
+                    Formulário de cadastro de pessoas 60+
+                </p>
+            </div>
+        </header>
+
+        <form id="seniorForm" class="space-y-6">
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Dados pessoais
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Nome completo
+                        </label>
+                        <input type="text" id="nome" required
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Sexo
+                        </label>
+                        <select id="sexo"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                            <option value="">Selecione</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Data de nascimento
+                        </label>
+                        <input type="date" id="data_nascimento" required
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Contato e endereço
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Telefone
+                        </label>
+                        <input type="text" id="telefone"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            E-mail
+                        </label>
+                        <input type="email" id="email"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Endereço
+                        </label>
+                        <input type="text" id="endereco"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">Igreja</h2>
+                <div class="space-y-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600 mb-1">
+                                Situação na igreja
+                            </label>
+                            <select id="situacao_igreja"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                                <option value="ibvp">Membro da IBVP</option>
+                                <option value="other">Membro de outra igreja</option>
+                                <option value="none">Não é membro de nenhuma igreja</option>
+                            </select>
+                        </div>
+                        <div id="outra_igreja_wrapper" class="hidden">
+                            <label class="block text-sm font-medium text-slate-600 mb-1">
+                                Qual outra igreja?
+                            </label>
+                            <input type="text" id="outra_igreja"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Há quanto tempo frequenta a IBVP?
+                        </label>
+                        <select id="tempo_ibvp"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                            <option value="">Selecione uma opção</option>
+                            <option value="Menos de 1 ano">Menos de 1 ano</option>
+                            <option value="Entre 1 e 3 anos">Entre 1 e 3 anos</option>
+                            <option value="Entre 3 e 5 anos">Entre 3 e 5 anos</option>
+                            <option value="Mais de 5 anos">Mais de 5 anos</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Dados familiares
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Estado civil
+                        </label>
+                        <select id="estado_civil"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                            <option value="">Selecione</option>
+                            <option value="Solteiro(a)">Solteiro(a)</option>
+                            <option value="Casado(a)">Casado(a)</option>
+                            <option value="Viúvo(a)">Viúvo(a)</option>
+                            <option value="Divorciado(a)">Divorciado(a)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Tem filhos?
+                        </label>
+                        <select id="tem_filhos"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
+                            <option value="">Selecione</option>
+                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Nome do cônjuge
+                        </label>
+                        <input type="text" id="nome_conjuge"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">
+                            Data de casamento
+                        </label>
+                        <input type="date" id="data_casamento"
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500" />
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-3">
+                    Autorização de uso dos dados
+                </h2>
+                <label class="flex items-start gap-2 text-sm text-slate-700">
+                    <input type="checkbox" id="consent" class="mt-1 rounded border-slate-300" />
+                    <span>
+                        Autorizo o Ministério de Famílias da IBVP a coletar e utilizar
+                        meus dados pessoais exclusivamente para fins de contato pastoral,
+                        organização de eventos e comunicações internas da igreja. Estou
+                        ciente de que meus dados serão tratados conforme a Lei Geral de
+                        Proteção de Dados (LGPD – Lei nº 13.709/2018), não serão
+                        compartilhados com terceiros e poderão ser atualizados ou excluídos
+                        a qualquer momento mediante solicitação.
+                    </span>
+                </label>
+                <p class="text-xs text-slate-400 mt-1">
+                    Em caso de dúvidas ou pedidos de atualização/exclusão de dados,
+                    procure a liderança do Ministério de Famílias da IBVP.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-lg font-semibold text-slate-700 mb-1">
+                    Observações
+                </h2>
+                <p class="text-xs text-slate-400 mb-1">
+                    Este espaço é para você compartilhar livremente qualquer detalhe, pedido ou informação que deseja
+                    que o Ministério de Famílias conheça.
+                </p>
+                <textarea id="observacoes" rows="3"
+                    class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"></textarea>
+            </section>
+
+            <div id="message" class="text-sm"></div>
+
+            <div class="flex justify-end pt-2">
+                <button type="submit"
+                    class="inline-flex items-center gap-2 rounded-xl bg-sky-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:opacity-60">
+                    Enviar cadastro
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("seniorForm");
+        const messageDiv = document.getElementById("message");
+        const situacaoIgrejaSelect = document.getElementById("situacao_igreja");
+        const outraIgrejaWrapper = document.getElementById("outra_igreja_wrapper");
+        const outraIgrejaInput = document.getElementById("outra_igreja");
+        const consentCheckbox = document.getElementById("consent");
+
+        const API_URL = "/api/senior";
+
+        function updateOutraIgrejaVisibility() {
+            if (situacaoIgrejaSelect.value === "other") {
+                outraIgrejaWrapper.classList.remove("hidden");
+            } else {
+                outraIgrejaWrapper.classList.add("hidden");
+                outraIgrejaInput.value = "";
+            }
+        }
+
+        function calculateAgeFromInput(dateString) {
+            if (!dateString) return "";
+
+            const birthDate = new Date(dateString + "T00:00:00");
+            if (isNaN(birthDate)) return "";
+
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            const dayDiff = today.getDate() - birthDate.getDate();
+
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                age--;
+            }
+
+            return age;
+        }
+
+        situacaoIgrejaSelect.addEventListener("change", updateOutraIgrejaVisibility);
+        updateOutraIgrejaVisibility();
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            messageDiv.textContent = "";
+            messageDiv.className = "text-sm";
+
+            const nome = document.getElementById("nome").value.trim();
+            const dataNascimento = document.getElementById("data_nascimento").value || "";
+
+            if (!nome) {
+                messageDiv.textContent = "Por favor, preencha o nome completo.";
+                messageDiv.classList.add("text-red-600");
+                return;
+            }
+
+            if (!dataNascimento) {
+                messageDiv.textContent = "Por favor, preencha a data de nascimento.";
+                messageDiv.classList.add("text-red-600");
+                return;
+            }
+
+            if (!consentCheckbox.checked) {
+                messageDiv.textContent = "Para prosseguir, é preciso autorizar o uso dos dados.";
+                messageDiv.classList.add("text-red-600");
+                return;
+            }
+
+            const idade = calculateAgeFromInput(dataNascimento);
+            if (idade === "" || idade < 60) {
+                messageDiv.textContent = "Este formulário é destinado a pessoas com 60 anos ou mais.";
+                messageDiv.classList.add("text-red-600");
+                return;
+            }
+
+            const situacaoRaw = situacaoIgrejaSelect.value;
+            let situacaoTexto = "Não é membro de nenhuma igreja";
+            if (situacaoRaw === "ibvp") situacaoTexto = "Membro da IBVP";
+            if (situacaoRaw === "other") situacaoTexto = "Membro de outra igreja";
+
+            const payload = {
+                action: "create_senior",
+                nome: nome,
+                sexo: document.getElementById("sexo").value || "",
+                data_nascimento: dataNascimento,
+                idade: idade,
+                telefone: document.getElementById("telefone").value.trim() || "",
+                email: document.getElementById("email").value.trim() || "",
+                endereco: document.getElementById("endereco").value.trim() || "",
+                situacao_igreja: situacaoTexto,
+                eh_membro_ibvp: situacaoRaw === "ibvp",
+                outra_igreja: situacaoRaw === "other" ? outraIgrejaInput.value.trim() || "" : "",
+                tempo_ibvp: document.getElementById("tempo_ibvp").value || "",
+                estado_civil: document.getElementById("estado_civil").value || "",
+                nome_conjuge: document.getElementById("nome_conjuge").value.trim() || "",
+                data_casamento: document.getElementById("data_casamento").value || "",
+                tem_filhos: document.getElementById("tem_filhos").value || "",
+                familia_referencia: "",
+                couple_id: "",
+                origem: "form_60_plus",
+                status_registro: "ativo",
+                observacoes: document.getElementById("observacoes").value.trim() || ""
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!response.ok) {
+                    console.error("Erro ao enviar cadastro 60+:", await response.text());
+                    messageDiv.textContent = "Ocorreu um erro ao salvar o cadastro. Tente novamente.";
+                    messageDiv.classList.add("text-red-600");
+                    return;
+                }
+
+                messageDiv.textContent = "Cadastro enviado com sucesso! Muito obrigado 😊";
+                messageDiv.classList.add("text-emerald-600");
+
+                form.reset();
+                updateOutraIgrejaVisibility();
+            } catch (err) {
+                console.error(err);
+                messageDiv.textContent = "Erro de conexão ao enviar o cadastro. Tente novamente.";
+                messageDiv.classList.add("text-red-600");
+            }
+        });
+    </script>
+</body>
+
+</html>
