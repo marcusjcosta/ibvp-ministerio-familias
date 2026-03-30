@@ -87,7 +87,7 @@
                     </p>
                     <div class="flex flex-col items-center gap-2 md:flex-row md:items-center md:gap-4">
                         <div class="flex flex-col items-center gap-2 shrink-0">
-                            <canvas id="qrCanvas" class="border border-slate-200 rounded-xl bg-white w-24 h-24 md:w-[220px] md:h-[220px]"></canvas>
+                            <canvas id="qrCanvas" class="border border-slate-200 rounded-xl bg-white w-20 h-20 md:w-[180px] md:h-[180px]"></canvas>
                             <button id="downloadQrButton"
                                 class="inline-flex items-center justify-center rounded-lg bg-slate-100 px-2 py-1 md:px-3 md:py-1 text-[11px] md:text-xs font-medium text-slate-700 hover:bg-slate-200">
                                 Baixar QR
@@ -122,7 +122,7 @@
                     <div class="flex flex-col items-center gap-2 md:flex-row md:items-center md:gap-4">
                         <div class="flex flex-col items-center gap-2 shrink-0">
                             <div id="seniorQrPlaceholder"
-                                class="w-24 h-24 md:w-[220px] md:h-[220px] border border-dashed border-slate-300 rounded-xl bg-slate-50 flex items-center justify-center text-[11px] md:text-xs text-slate-400 text-center px-3">
+                                class="w-20 h-20 md:w-[180px] md:h-[180px] border border-dashed border-slate-300 rounded-xl bg-slate-50 flex items-center justify-center text-[11px] md:text-xs text-slate-400 text-center px-3">
                                 Formulário 60+ ainda não configurado
                             </div>
                             <canvas id="qrCanvasSenior" class="hidden border border-slate-200 rounded-xl bg-white w-24 h-24 md:w-[220px] md:h-[220px]"></canvas>
@@ -562,6 +562,19 @@
             return "Não é membro de nenhuma igreja";
         }
 
+        function formatSeniorOriginLabel(origin) {
+            if (origin === "couples") return "Famílias";
+            if (origin === "form_60_plus") return "Cadastro 60+";
+            return origin || "Não informado";
+        }
+
+        function formatSeniorOriginValue(labelOrValue) {
+            if (labelOrValue === "Famílias" || labelOrValue === "couples") return "couples";
+            if (labelOrValue === "Cadastro 60+" || labelOrValue === "form_60_plus") return "form_60_plus";
+            return labelOrValue || "";
+        }
+
+
         function updateMonthLabels() {
             const hoje = new Date();
             const year = hoje.getFullYear();
@@ -628,7 +641,7 @@
                 QRCode.toCanvas(
                     qrCanvasSenior,
                     FORM_60_URL,
-                    { width: 220 },
+                    { width: window.innerWidth < 640 ? 96 : 180 },
                     (error) => {
                         if (error) {
                             console.error(error);
@@ -1515,7 +1528,7 @@
                 };
 
                 try {
-                    const resp = await fetch(API_URL, {
+                    const resp = await fetch(SENIOR_API_URL, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(payload),
@@ -1547,6 +1560,7 @@
             });
         }
 
+        
         function openSeniorDetails(row) {
             const hoje = new Date();
             const overlayTitle = familyDetailsOverlay.querySelector("h2");
@@ -1555,52 +1569,359 @@
             const birth = parseDateSafe(row.data_nascimento);
             const wedding = parseDateSafe(row.data_casamento);
             const age = birth ? calculateAge(birth, hoje) : row.idade;
+            const originLabel = formatSeniorOriginLabel(row.origem);
+
+            const familyOptions = Array.from(
+                new Set(
+                    couples
+                        .map((item) => item.name_couple || "")
+                        .filter(Boolean)
+                )
+            ).sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+            if (row.familia_referencia && !familyOptions.includes(row.familia_referencia)) {
+                familyOptions.unshift(row.familia_referencia);
+            }
+
+            const familyOptionsHtml = [
+                `<option value="">Sem vínculo</option>`,
+                ...familyOptions.map((name) => `
+                    <option value="${name.replace(/"/g, '&quot;')}" ${row.familia_referencia === name ? "selected" : ""}>
+                        ${name}
+                    </option>
+                `)
+            ].join("");
 
             familyDetailsContent.innerHTML = `
               <section>
-                <h3 class="text-base font-semibold text-slate-800 mb-1">${row.nome || "Pessoa sem nome"}</h3>
-                <p class="text-xs text-slate-500">Dados da pessoa cadastrada no segmento 60+.</p>
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <h3 class="text-base font-semibold text-slate-800 mb-1">${row.nome || "Pessoa sem nome"}</h3>
+                    <p class="text-xs text-slate-500">Dados da pessoa cadastrada no segmento 60+.</p>
+                  </div>
+                  <div class="flex gap-2">
+                    <button
+                      id="editSeniorButton"
+                      class="inline-flex items-center justify-center rounded-xl bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-amber-700"
+                    >
+                      Editar cadastro
+                    </button>
+                    <button
+                      id="deleteSeniorButton"
+                      class="inline-flex items-center justify-center rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-red-700"
+                    >
+                      Excluir cadastro
+                    </button>
+                  </div>
+                </div>
               </section>
 
-              <section class="border rounded-xl border-slate-200 p-3">
-                <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Dados pessoais</h4>
-                <p><span class="font-medium">Sexo:</span> ${row.sexo || "Não informado"}</p>
-                <p><span class="font-medium">Nascimento:</span> ${birth ? `${formatDateFull(birth)} (${age} anos)` : "Não informado"}</p>
-                <p><span class="font-medium">Telefone:</span> ${row.telefone || "Não informado"}</p>
-                <p><span class="font-medium">E-mail:</span> ${row.email || "Não informado"}</p>
-              </section>
+              <div id="seniorViewMode" class="space-y-4">
+                <section class="border rounded-xl border-slate-200 p-3">
+                  <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Dados pessoais</h4>
+                  <p><span class="font-medium">Sexo:</span> ${row.sexo || "Não informado"}</p>
+                  <p><span class="font-medium">Nascimento:</span> ${birth ? `${formatDateFull(birth)} (${age} anos)` : "Não informado"}</p>
+                  <p><span class="font-medium">Telefone:</span> ${row.telefone || "Não informado"}</p>
+                  <p><span class="font-medium">E-mail:</span> ${row.email || "Não informado"}</p>
+                </section>
 
-              <section class="border rounded-xl border-slate-200 p-3">
-                <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Igreja</h4>
-                <p><span class="font-medium">Situação na igreja:</span> ${row.situacao_igreja || "Não informado"}</p>
-                <p><span class="font-medium">Membro da IBVP:</span> ${row.eh_membro_ibvp ? "Sim" : "Não"}</p>
-                <p><span class="font-medium">Outra igreja:</span> ${row.outra_igreja || "Não informado"}</p>
-                <p><span class="font-medium">Tempo na IBVP:</span> ${row.tempo_ibvp || "Não informado"}</p>
-              </section>
+                <section class="border rounded-xl border-slate-200 p-3">
+                  <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Igreja</h4>
+                  <p><span class="font-medium">Situação na igreja:</span> ${row.situacao_igreja || "Não informado"}</p>
+                  <p><span class="font-medium">Membro da IBVP:</span> ${row.eh_membro_ibvp ? "Sim" : "Não"}</p>
+                  <p><span class="font-medium">Outra igreja:</span> ${row.outra_igreja || "Não informado"}</p>
+                  <p><span class="font-medium">Tempo na IBVP:</span> ${row.tempo_ibvp || "Não informado"}</p>
+                </section>
 
-              <section class="border rounded-xl border-slate-200 p-3">
-                <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Família e relacionamento</h4>
-                <p><span class="font-medium">Família de referência:</span> ${row.familia_referencia || "Não vinculada"}</p>
-                <p><span class="font-medium">Nome do cônjuge:</span> ${row.nome_conjuge || "Não informado"}</p>
-                <p><span class="font-medium">Estado civil:</span> ${row.estado_civil || "Não informado"}</p>
-                <p><span class="font-medium">Data de casamento:</span> ${wedding ? formatDateFull(wedding) : "Não informado"}</p>
-                <p><span class="font-medium">Tem filhos:</span> ${row.tem_filhos || "Não informado"}</p>
-              </section>
+                <section class="border rounded-xl border-slate-200 p-3">
+                  <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Família e relacionamento</h4>
+                  <p><span class="font-medium">Família de referência:</span> ${row.familia_referencia || "Não vinculada"}</p>
+                  <p><span class="font-medium">Nome do cônjuge:</span> ${row.nome_conjuge || "Não informado"}</p>
+                  <p><span class="font-medium">Estado civil:</span> ${row.estado_civil || "Não informado"}</p>
+                  <p><span class="font-medium">Data de casamento:</span> ${wedding ? formatDateFull(wedding) : "Não informado"}</p>
+                  <p><span class="font-medium">Tem filhos:</span> ${row.tem_filhos || "Não informado"}</p>
+                </section>
 
-              <section class="border rounded-xl border-slate-200 p-3">
-                <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Endereço e cadastro</h4>
-                <p><span class="font-medium">Endereço:</span> ${row.endereco || "Não informado"}</p>
-                <p><span class="font-medium">Origem:</span> ${row.origem || "Não informado"}</p>
-                <p><span class="font-medium">Status do registro:</span> ${row.status_registro || "Não informado"}</p>
-              </section>
+                <section class="border rounded-xl border-slate-200 p-3">
+                  <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Endereço e cadastro</h4>
+                  <p><span class="font-medium">Endereço:</span> ${row.endereco || "Não informado"}</p>
+                  <p><span class="font-medium">Origem:</span> ${originLabel}</p>
+                  <p><span class="font-medium">Status do registro:</span> ${row.status_registro || "Não informado"}</p>
+                </section>
 
-              <section class="border rounded-xl border-slate-200 p-3">
-                <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Observações</h4>
-                <p class="whitespace-pre-wrap text-sm text-slate-800">${row.observacoes || "Nenhuma observação registrada."}</p>
-              </section>
+                <section class="border rounded-xl border-slate-200 p-3">
+                  <h4 class="text-xs font-semibold text-slate-600 uppercase mb-2">Observações</h4>
+                  <p class="whitespace-pre-wrap text-sm text-slate-800">${row.observacoes || "Nenhuma observação registrada."}</p>
+                </section>
+              </div>
+
+              <div id="seniorEditMode" class="hidden space-y-4">
+                <section class="border rounded-xl border-slate-200 p-3 space-y-3">
+                  <h4 class="text-xs font-semibold text-slate-600 uppercase">Editar pessoa 60+</h4>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Nome</label>
+                    <input id="edit_senior_nome" type="text" value="${row.nome || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Sexo</label>
+                    <select id="edit_senior_sexo" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                      <option value="" ${!row.sexo ? "selected" : ""}>Selecione</option>
+                      <option value="Masculino" ${row.sexo === "Masculino" ? "selected" : ""}>Masculino</option>
+                      <option value="Feminino" ${row.sexo === "Feminino" ? "selected" : ""}>Feminino</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Data de nascimento</label>
+                    <input id="edit_senior_data_nascimento" type="date" value="${row.data_nascimento || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Telefone</label>
+                    <input id="edit_senior_telefone" type="text" value="${row.telefone || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">E-mail</label>
+                    <input id="edit_senior_email" type="email" value="${row.email || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Situação na igreja</label>
+                    <select id="edit_senior_situacao_igreja" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                      <option value="Membro da IBVP" ${row.situacao_igreja === "Membro da IBVP" ? "selected" : ""}>Membro da IBVP</option>
+                      <option value="Membro de outra igreja" ${row.situacao_igreja === "Membro de outra igreja" ? "selected" : ""}>Membro de outra igreja</option>
+                      <option value="Não é membro de nenhuma igreja" ${row.situacao_igreja === "Não é membro de nenhuma igreja" ? "selected" : ""}>Não é membro de nenhuma igreja</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Membro da IBVP</label>
+                    <select id="edit_senior_eh_membro_ibvp" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                      <option value="true" ${row.eh_membro_ibvp ? "selected" : ""}>Sim</option>
+                      <option value="false" ${!row.eh_membro_ibvp ? "selected" : ""}>Não</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Outra igreja</label>
+                    <input id="edit_senior_outra_igreja" type="text" value="${row.outra_igreja || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Tempo na IBVP</label>
+                    <select id="edit_senior_tempo_ibvp" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                      <option value="" ${!row.tempo_ibvp ? "selected" : ""}>Selecione</option>
+                      <option value="Menos de 1 ano" ${row.tempo_ibvp === "Menos de 1 ano" ? "selected" : ""}>Menos de 1 ano</option>
+                      <option value="Entre 1 e 3 anos" ${row.tempo_ibvp === "Entre 1 e 3 anos" ? "selected" : ""}>Entre 1 e 3 anos</option>
+                      <option value="Entre 3 e 5 anos" ${row.tempo_ibvp === "Entre 3 e 5 anos" ? "selected" : ""}>Entre 3 e 5 anos</option>
+                      <option value="Mais de 5 anos" ${row.tempo_ibvp === "Mais de 5 anos" ? "selected" : ""}>Mais de 5 anos</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Família de referência</label>
+                    <select id="edit_senior_familia_referencia" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                      ${familyOptionsHtml}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Nome do cônjuge</label>
+                    <input id="edit_senior_nome_conjuge" type="text" value="${row.nome_conjuge || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Estado civil</label>
+                    <input id="edit_senior_estado_civil" type="text" value="${row.estado_civil || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Data de casamento</label>
+                    <input id="edit_senior_data_casamento" type="date" value="${row.data_casamento || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Tem filhos</label>
+                    <select id="edit_senior_tem_filhos" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                      <option value="" ${!row.tem_filhos ? "selected" : ""}>Selecione</option>
+                      <option value="Sim" ${row.tem_filhos === "Sim" ? "selected" : ""}>Sim</option>
+                      <option value="Não" ${row.tem_filhos === "Não" ? "selected" : ""}>Não</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Endereço</label>
+                    <input id="edit_senior_endereco" type="text" value="${row.endereco || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Origem</label>
+                    <select id="edit_senior_origem" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
+                      <option value="couples" ${row.origem === "couples" ? "selected" : ""}>Famílias</option>
+                      <option value="form_60_plus" ${row.origem === "form_60_plus" ? "selected" : ""}>Cadastro 60+</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Status do registro</label>
+                    <input id="edit_senior_status_registro" type="text" value="${row.status_registro || ""}"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Observações</label>
+                    <textarea id="edit_senior_observacoes" rows="4"
+                      class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">${row.observacoes || ""}</textarea>
+                  </div>
+
+                  <div class="flex gap-2 pt-2">
+                    <button
+                      id="saveSeniorButton"
+                      class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700"
+                    >
+                      Salvar alterações
+                    </button>
+                    <button
+                      id="cancelEditSeniorButton"
+                      class="inline-flex items-center justify-center rounded-xl bg-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 shadow hover:bg-slate-400"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </section>
+              </div>
             `;
 
             familyDetailsOverlay.classList.remove("hidden");
+
+            const deleteButton = document.getElementById("deleteSeniorButton");
+            const editButton = document.getElementById("editSeniorButton");
+            const saveButton = document.getElementById("saveSeniorButton");
+            const cancelButton = document.getElementById("cancelEditSeniorButton");
+            const viewMode = document.getElementById("seniorViewMode");
+            const editMode = document.getElementById("seniorEditMode");
+
+            deleteButton.addEventListener("click", async () => {
+                const confirmed = confirm(
+                    `Tem certeza que deseja excluir o cadastro de "${row.nome || "esta pessoa"}"?`
+                );
+
+                if (!confirmed) return;
+
+                try {
+                    const resp = await fetch(SENIOR_API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            action: "delete_senior",
+                            id: row.id,
+                        }),
+                    });
+
+                    const result = await resp.json();
+
+                    if (!resp.ok || !result.success) {
+                        alert("Não foi possível excluir o cadastro.");
+                        console.error(result);
+                        return;
+                    }
+
+                    closeFamilyDetails();
+                    await loadSeniorsFromApi();
+                    applySeniorFiltersAndRender();
+                    alert("Cadastro excluído com sucesso.");
+                } catch (err) {
+                    console.error(err);
+                    alert("Erro ao excluir cadastro.");
+                }
+            });
+
+            editButton.addEventListener("click", () => {
+                viewMode.classList.add("hidden");
+                editMode.classList.remove("hidden");
+            });
+
+            cancelButton.addEventListener("click", () => {
+                editMode.classList.add("hidden");
+                viewMode.classList.remove("hidden");
+            });
+
+            saveButton.addEventListener("click", async () => {
+                const selectedFamily = document.getElementById("edit_senior_familia_referencia").value || "";
+                const matchedCouple = couples.find((item) => (item.name_couple || "") === selectedFamily);
+                const birthValue = document.getElementById("edit_senior_data_nascimento").value || "";
+                const calculatedAge = birthValue ? calculateAge(parseDateSafe(birthValue), new Date()) : "";
+
+                const payload = {
+                    action: "update_senior",
+                    id: row.id,
+                    nome: document.getElementById("edit_senior_nome").value.trim(),
+                    sexo: document.getElementById("edit_senior_sexo").value || "",
+                    data_nascimento: birthValue,
+                    idade: calculatedAge,
+                    telefone: document.getElementById("edit_senior_telefone").value.trim(),
+                    email: document.getElementById("edit_senior_email").value.trim(),
+                    endereco: document.getElementById("edit_senior_endereco").value.trim(),
+                    situacao_igreja: document.getElementById("edit_senior_situacao_igreja").value || "",
+                    eh_membro_ibvp: document.getElementById("edit_senior_eh_membro_ibvp").value === "true",
+                    outra_igreja: document.getElementById("edit_senior_outra_igreja").value.trim(),
+                    tempo_ibvp: document.getElementById("edit_senior_tempo_ibvp").value || "",
+                    estado_civil: document.getElementById("edit_senior_estado_civil").value.trim(),
+                    nome_conjuge: document.getElementById("edit_senior_nome_conjuge").value.trim(),
+                    data_casamento: document.getElementById("edit_senior_data_casamento").value || "",
+                    tem_filhos: document.getElementById("edit_senior_tem_filhos").value || "",
+                    familia_referencia: selectedFamily,
+                    couple_id: matchedCouple ? matchedCouple.id : "",
+                    origem: document.getElementById("edit_senior_origem").value || "",
+                    status_registro: document.getElementById("edit_senior_status_registro").value.trim(),
+                    observacoes: document.getElementById("edit_senior_observacoes").value.trim()
+                };
+
+                try {
+                    const resp = await fetch(API_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload),
+                    });
+
+                    const result = await resp.json();
+
+                    if (!resp.ok || !result.success) {
+                        alert("Não foi possível salvar as alterações.");
+                        console.error(result);
+                        return;
+                    }
+
+                    await loadSeniorsFromApi();
+                    applySeniorFiltersAndRender();
+
+                    const updatedRow = seniors.find((item) => String(item.id) === String(row.id));
+                    if (updatedRow) {
+                        openSeniorDetails(updatedRow);
+                    } else {
+                        closeFamilyDetails();
+                    }
+
+                    alert("Cadastro atualizado com sucesso.");
+                } catch (err) {
+                    console.error(err);
+                    alert("Erro ao salvar alterações.");
+                }
+            });
         }
 
         function closeFamilyDetails() {
