@@ -174,17 +174,6 @@
                             <option value="Divorciado(a)">Divorciado(a)</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-1">
-                            Tem filhos?
-                        </label>
-                        <select id="tem_filhos"
-                            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500">
-                            <option value="">Selecione</option>
-                            <option value="Sim">Sim</option>
-                            <option value="Não">Não</option>
-                        </select>
-                    </div>
                     <div id="conjuge_fields" class="hidden md:col-span-2 grid md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-600 mb-1">
@@ -361,7 +350,6 @@
                 estado_civil: document.getElementById("estado_civil").value || "",
                 nome_conjuge: document.getElementById("nome_conjuge").value.trim() || "",
                 data_casamento: document.getElementById("data_casamento").value || "",
-                tem_filhos: document.getElementById("tem_filhos").value || "",
                 familia_referencia: "",
                 couple_id: "",
                 origem: "form_60_plus",

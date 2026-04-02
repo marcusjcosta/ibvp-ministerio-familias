@@ -1643,7 +1643,6 @@
                   <p><span class="font-medium">Nome do cônjuge:</span> ${row.nome_conjuge || "Não informado"}</p>
                   <p><span class="font-medium">Estado civil:</span> ${row.estado_civil || "Não informado"}</p>
                   <p><span class="font-medium">Data de casamento:</span> ${wedding ? formatDateFull(wedding) : "Não informado"}</p>
-                  <p><span class="font-medium">Tem filhos:</span> ${row.tem_filhos || "Não informado"}</p>
                 </section>
 
                 <section class="border rounded-xl border-slate-200 p-3">
@@ -1753,15 +1752,6 @@
                     <label class="block text-xs font-medium text-slate-600 mb-1">Data de casamento</label>
                     <input id="edit_senior_data_casamento" type="date" value="${row.data_casamento || ""}"
                       class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm" />
-                  </div>
-
-                  <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">Tem filhos</label>
-                    <select id="edit_senior_tem_filhos" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm">
-                      <option value="" ${!row.tem_filhos ? "selected" : ""}>Selecione</option>
-                      <option value="Sim" ${row.tem_filhos === "Sim" ? "selected" : ""}>Sim</option>
-                      <option value="Não" ${row.tem_filhos === "Não" ? "selected" : ""}>Não</option>
-                    </select>
                   </div>
 
                   <div>
@@ -1887,7 +1877,6 @@
                     estado_civil: document.getElementById("edit_senior_estado_civil").value.trim(),
                     nome_conjuge: document.getElementById("edit_senior_nome_conjuge").value.trim(),
                     data_casamento: document.getElementById("edit_senior_data_casamento").value || "",
-                    tem_filhos: document.getElementById("edit_senior_tem_filhos").value || "",
                     familia_referencia: selectedFamily,
                     couple_id: matchedCouple ? matchedCouple.id : "",
                     origem: document.getElementById("edit_senior_origem").value || "",
